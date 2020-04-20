@@ -10,7 +10,7 @@ function createDeck() {
     }
     return deck;
 }
-
+//test
 //Precondition: deck is not empty
 //Postcondition: deck is shuffled 
 function shuffle(deck) { 
