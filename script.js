@@ -10,10 +10,10 @@ function createDeck() {
     }
     return deck;
 }
-//test
+
 //Precondition: deck is not empty
-//Postcondition: deck is shuffled 
-function shuffle(deck) { 
+//Postcondition: deck is shuffled
+function shuffle(deck) {
     if (deck.length < 1) return;
     for (var i = 0; i < 250; i++) {
         var pos1 = Math.floor((Math.random() * deck.length));
@@ -23,7 +23,6 @@ function shuffle(deck) {
         deck[pos1] = deck[pos2];
         deck[pos2] = tmp;
     }
-
 }
 
 //Precondition: deck is not empty
@@ -65,13 +64,15 @@ function deal(deck, hand, id, show) {
         if (blackjackCalculateValue(hand) > 21) { alert("Game Over"); }
         if (blackjackCalculateValue(hand) == 21) alert("You have 21!");
     }
-
 }
 
+
+//Precondition: hand size must be greater than 0.
 function blackjackCalculateValue(hand) {
+    if (hand.length < 0) return;
     var sum = 0;
     var aces = 0;
-    
+
     for (var i = 0; i < hand.length; i++) {
         if (hand[i][0] == 'J' || hand[i][0] == 'Q' || hand[i][0] == 'K')
             sum += 10;
@@ -84,14 +85,11 @@ function blackjackCalculateValue(hand) {
         sum -= 10;
         aces--;
     }
-    
-    return sum;
 
+    return sum;
 }
 function blackjackAI(deck, hand) {
-
 }
-
 
 function driverBlackjack() {
     //setTimeout(() => { document.getElementById("actionText").innerHTML = 'Welcome to the game! Currently dealing...'; }, 750);
@@ -100,8 +98,8 @@ function driverBlackjack() {
 
     //create hands for the players
     var hand1 = dealHand(testDeck, 2);
-    var hand2 = dealHand(testDeck,2);
-    var hand3 = dealHand(testDeck,2);
+    var hand2 = dealHand(testDeck, 2);
+    var hand3 = dealHand(testDeck, 2);
     var player = dealHand(testDeck, 2);
 
     //assign onclick event to the Hit button
@@ -114,7 +112,5 @@ function driverBlackjack() {
     setTimeout(() => { loadHandImages(hand2, "p2Hand", false); }, 2000);
     setTimeout(() => { loadHandImages(hand3, "p3Hand", false); }, 2500);
     setTimeout(() => { loadHandImages(player, "playerHand", true); }, 3000);
-    setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" +"The game has started. Good luck."; }, 3000);
-
-   
+    setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3000);
 }
