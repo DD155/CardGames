@@ -1,10 +1,10 @@
 # CardGames
 A website for a collection of different classic playing card games.
 
-Games:
+Games:  
 Blackjack (50%)  
 Poker  
 
-Future:
-Chinese Poker
-Big 2
+Future:  
+Chinese Poker  
+Big 2  
