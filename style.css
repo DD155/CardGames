@@ -1,0 +1,55 @@
+#divMain{
+    text-align: center;
+}
+
+#buttonList {
+    /*text-align: center;*/
+    list-style-type: none;
+}
+
+#gameArea {
+    text-align: center;
+    border: 3px solid black;
+    height: 600px;
+    background-color: green;
+}
+
+#player2Area {
+    float:left;
+}
+
+#player3Area {
+    float: right;
+}
+#opening{
+    visibility:hidden;
+    text-align:center;
+}
+
+#dealButton, #stayButton{
+    width:50px;
+    height:50px;
+    background-color: white;
+}
+
+#gameActions{
+    text-align:left;
+    position:fixed;
+}
+.buttonAction {
+    width: 250px;
+    height: 100px;
+}
+
+.buttonListItem{
+    margin: 40px 0;
+}
+
+.cardImages{
+    display:inline-block;
+    border: 3px groove;
+    border-radius: 7px;
+    padding: 5px 5px;
+    margin: 0px 5px;
+    background-color: white;
+}

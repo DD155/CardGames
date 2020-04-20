@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="/CodingProjects/Web/Cards/script.js"></script>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>BlackJack</title>
+</head>
+<body onload="driverBlackjack()">
+    <button style="float:left; width:50px; height:50px; position:fixed;" class="backButton" onclick="location.href='/CodingProjects/Web/Cards/CardsHomePage.html'">Back</button>
+    <h1 style="text-align:center">Blackjack</h1>
+    <!--<p id="opening">Welcome to the game! Currently dealing... </p>-->
+    <div id="gameArea">
+        <div id="gameActions">
+            <b id="actionText" style="color:white">Welcome to the game! Currently dealing...</b>
+        </div>
+        <div id="player4Area">
+            <br /> <b style="color:white">Player 4 (Dealer) </b> <br />
+            <p id="p1Hand"></p>
+            <br /> <br /> <br />
+        </div>
+        <div>
+            <button id="dealButton"> Hit </button>
+            <button id="stayButton"> Stay </button>
+        </div>
+        <div id="player3Area">
+            <b style="color:white">Player 3 </b> <br />
+            <p id="p2Hand"></p>
+        </div>
+        <div id="player2Area">
+            <b style="color:white">Player 2 </b><br />
+            <p id="p3Hand"></p>
+
+        </div>
+        <br /> <br /> <br />
+        <div id="player1Area">
+            <b style="color:white">Player (You) </b><br />
+            <p id="playerHand"></p>
+        </div>
+    </div>
+
+</body>
+</html>
