@@ -26,8 +26,8 @@
     text-align:center;
 }
 
-#dealButton, #stayButton{
-    width:50px;
+#dealButton, #stayButton, #doubleButton, #splitButton{
+    width:125px;
     height:50px;
     background-color: white;
 }

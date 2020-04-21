@@ -127,6 +127,10 @@ function blackjackAI(deck, hand, id) {
     if (deck < 1 || hand < 1) return; //precondition
 
     var currSum = blackjackCalculateValue(hand);
+
+    //TODO: implement choice for AI to split
+    //TODO: implement choice for AI to double down
+
     var diff = 21 - currSum;
     if (diff >= 11) deal(deck, hand, id, true); //always hit in this case
     else {
@@ -135,8 +139,8 @@ function blackjackAI(deck, hand, id) {
 
         if (chance(probability)) deal(deck, hand, id, true);
         else {
-            //TODO: call "stay" function
-            console.log("Stay.");
+            //TODO: call "stand" function
+            console.log("Stand.");
         }
     }
 }
@@ -151,6 +155,19 @@ function driverBlackjack() {
     var hand3 = dealHand(deck, 2);
     var player = dealHand(deck, 2);
 
+    clearTimeout();
+
+    
+
+    //show images as they are being dealed, left to right from dealer view
+    setTimeout(() => { loadImage(hand1, 0, "p4Hand", true); }, 1500);
+    setTimeout(() => { loadHandImages(hand2, "p3Hand", true); }, 2000);
+    setTimeout(() => { loadHandImages(hand3, "playerHand", true); }, 2500);
+    setTimeout(() => { loadHandImages(player, "p2Hand", true); }, 3000);
+    //dealer has card face down
+    setTimeout(() => { loadImage(hand1, 1, "p4Hand", false); }, 3500);
+    setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3500);
+
     //assign onclick event to the Hit button
     document.getElementById('dealButton').onclick = function () {
         deal(deck, player, 'playerHand', true);
@@ -158,11 +175,4 @@ function driverBlackjack() {
         blackjackAI(deck, hand2, "p3Hand");
         blackjackAI(deck, hand3, "p2Hand");
     }
-
-    //show images as they are being dealed
-    setTimeout(() => { loadHandImages(hand1, "p4Hand", true); }, 1500);
-    setTimeout(() => { loadHandImages(hand2, "p3Hand", true); }, 2000);
-    setTimeout(() => { loadHandImages(hand3, "p2Hand", true); }, 2500);
-    setTimeout(() => { loadHandImages(player, "playerHand", true); }, 3000);
-    setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3000);
 }
