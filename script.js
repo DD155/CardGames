@@ -10,7 +10,7 @@ function createDeck() {
     }
     return deck;
 }
-//commit test
+
 //Precondition: deck is not empty
 //Postcondition: deck is shuffled
 function shuffle(deck) {
@@ -62,14 +62,13 @@ function deal(deck, hand, id, show) {
     if (blackjackCalculateValue(hand) < 21) { //check if you can get another card
         hand.push(deck.pop());
         loadImage(hand, hand.length - 1, id, show);
-        document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " Hit!";
+        document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " hit.";
         if (blackjackCalculateValue(hand) > 21)
-            document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " Bombed!";
+            document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " bombed!";
     }
 }
 
-
-
+//Postcondition: return a string from the corresponding id
 function generateNameString(id) {
     switch (id) {
         case "playerHand":
@@ -85,9 +84,7 @@ function generateNameString(id) {
             return "Player 2";
             break;
     }
-
 }
-
 
 //Precondition: hand size must be greater than 0.
 function blackjackCalculateValue(hand) {
@@ -111,12 +108,12 @@ function blackjackCalculateValue(hand) {
     return sum;
 }
 
+//Postcondition: return a boolean depending on if the chance of getting the desired card is high enough
 function chance(probability) {
     if (Math.random() * 13 <= probability) return true;
     return false;
 }
 
-// TODO
 // Precondition: deck is not empty, hand is not empty
 // Postcondition: the AI has chosen to either hit or stay
 // algorithm will be as follows:
