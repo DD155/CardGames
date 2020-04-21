@@ -67,6 +67,11 @@ function deal(deck, hand, id, show) {
     }
 }
 
+function hit(deck, hand, id) {
+    deal(deck, hand, id, true);
+
+}
+
 //Precondition: hand size must be greater than 0.
 function blackjackCalculateValue(hand) {
     if (hand.length < 1) return; //precondition
@@ -89,6 +94,10 @@ function blackjackCalculateValue(hand) {
     return sum;
 }
 
+function chance(probability) {
+    if (Math.random() * 13 <= probability) return true;
+    return false;
+}
 // TODO
 // Precondition: deck is not empty, hand is not empty
 // Postcondition: the AI has chosen to either hit or stay
@@ -99,8 +108,22 @@ function blackjackCalculateValue(hand) {
 // 4. else determine probability of getting the difference 
 // e.g hand sum is 12, you can get 9 at most, which is 9/13 (2-9, ace)
 // use this new probability to determine if AI will hit or not.
-function blackjackAI(deck, hand) {
-    if (deck < 1 || hand < 1) return;
+function blackjackAI(deck, hand, id) {
+    if (deck < 1 || hand < 1) return; //precondition
+
+    var currSum = blackjackCalculateValue(hand);
+    var diff = 21 - currSum;
+    if (diff >= 11) deal(deck, hand, id, false); //always hit in this case
+    else {
+        if (diff == 10) var probability = 3;
+        else var probability = diff;
+
+        if (chance(probability)) deal(deck, hand, id, false);
+        else {
+            //TODO: call "stay" function
+            console.log(diff)
+        }
+    }
 }
 
 function driverBlackjack() {
