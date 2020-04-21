@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <title>BlackJack</title>
 </head>
-<body onload="driverBlackjack()">
+<body onload="driverBlackjack(); dealButtonOnclick()">
     <button style="float:left; width:50px; height:50px; position:fixed;" class="backButton" onclick="location.href='/CodingProjects/Web/CardGames/CardsHomePage.html'">Back</button>
     <h1 style="text-align:center">Blackjack</h1>
     <!--<p id="opening">Welcome to the game! Currently dealing... </p>-->
@@ -44,6 +44,7 @@
             <b id="playerBet" style="color:white"> 0 </b>
             <p id="playerHand"></p>
         </div>
+        <img id ="deckImg" src="/CodingProjects/Web/Cards/resources/CardImages/back.png"/> 
     </div>
 </body>
 </html>

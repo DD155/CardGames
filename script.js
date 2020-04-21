@@ -145,6 +145,10 @@ function blackjackAI(deck, hand, id) {
     }
 }
 
+function dealButtonOnclick() {
+
+}
+
 function driverBlackjack() {
     var deck = createDeck();
     shuffle(deck);
@@ -155,7 +159,6 @@ function driverBlackjack() {
     var hand3 = dealHand(deck, 2);
     var player = dealHand(deck, 2);
 
-    clearTimeout();
 
     
 
@@ -175,4 +178,6 @@ function driverBlackjack() {
         blackjackAI(deck, hand2, "p3Hand");
         blackjackAI(deck, hand3, "p2Hand");
     }
+
+    
 }

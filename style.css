@@ -15,15 +15,37 @@
 }
 
 #player2Area {
-    float:left;
+    /*float:left;*/
+    position:absolute;
+    left: 50px;
+    bottom: 250px;
+    
+    
 }
 
 #player3Area {
-    float: right;
+    /*float: right;*/
+    position:absolute;
+    right: 50px;
+    bottom: 250px;
 }
 #opening{
     visibility:hidden;
     text-align:center;
+}
+
+#deckImg {
+    position:absolute;
+    right:100px;
+    top: 100px;
+    width: 100px;
+    height: 125px;
+    display: inline-block;
+    border: 3px groove;
+    border-radius: 7px;
+    padding: 5px 5px;
+    margin: 0px 5px;
+    background-color: white;
 }
 
 #dealButton, #stayButton, #doubleButton, #splitButton{
