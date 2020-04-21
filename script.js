@@ -72,7 +72,7 @@ function deal(deck, hand, id, show) {
 function generateNameString(id) {
     switch (id) {
         case "playerHand":
-            return "Player 1";
+            return "Player 1 (You)";
             break;
         case "p4Hand":
             return "Player 4";
