@@ -62,15 +62,32 @@ function deal(deck, hand, id, show) {
     if (blackjackCalculateValue(hand) < 21) { //check if you can get another card
         hand.push(deck.pop());
         loadImage(hand, hand.length - 1, id, show);
-        if (blackjackCalculateValue(hand) > 21)  alert("Game Over"); 
-        if (blackjackCalculateValue(hand) == 21) alert("You have 21!");
+        document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " Hit!";
+        if (blackjackCalculateValue(hand) > 21)
+            document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " Bombed!";
     }
 }
 
-function hit(deck, hand, id) {
-    deal(deck, hand, id, true);
+
+
+function generateNameString(id) {
+    switch (id) {
+        case "playerHand":
+            return "Player 1";
+            break;
+        case "p4Hand":
+            return "Player 4";
+            break;
+        case "p3Hand":
+            return "Player 3";
+            break;
+        case "p2Hand":
+            return "Player 2";
+            break;
+    }
 
 }
+
 
 //Precondition: hand size must be greater than 0.
 function blackjackCalculateValue(hand) {
@@ -98,6 +115,7 @@ function chance(probability) {
     if (Math.random() * 13 <= probability) return true;
     return false;
 }
+
 // TODO
 // Precondition: deck is not empty, hand is not empty
 // Postcondition: the AI has chosen to either hit or stay
@@ -113,15 +131,15 @@ function blackjackAI(deck, hand, id) {
 
     var currSum = blackjackCalculateValue(hand);
     var diff = 21 - currSum;
-    if (diff >= 11) deal(deck, hand, id, false); //always hit in this case
+    if (diff >= 11) deal(deck, hand, id, true); //always hit in this case
     else {
         if (diff == 10) var probability = 3;
         else var probability = diff;
 
-        if (chance(probability)) deal(deck, hand, id, false);
+        if (chance(probability)) deal(deck, hand, id, true);
         else {
             //TODO: call "stay" function
-            console.log(diff)
+            console.log("Stay.");
         }
     }
 }
@@ -139,12 +157,15 @@ function driverBlackjack() {
     //assign onclick event to the Hit button
     document.getElementById('dealButton').onclick = function () {
         deal(deck, player, 'playerHand', true);
+        blackjackAI(deck, hand1, "p4Hand");
+        blackjackAI(deck, hand2, "p3Hand");
+        blackjackAI(deck, hand3, "p2Hand");
     }
 
     //show images as they are being dealed
-    setTimeout(() => { loadHandImages(hand1, "p1Hand", false); }, 1500);
-    setTimeout(() => { loadHandImages(hand2, "p2Hand", false); }, 2000);
-    setTimeout(() => { loadHandImages(hand3, "p3Hand", false); }, 2500);
+    setTimeout(() => { loadHandImages(hand1, "p4Hand", true); }, 1500);
+    setTimeout(() => { loadHandImages(hand2, "p3Hand", true); }, 2000);
+    setTimeout(() => { loadHandImages(hand3, "p2Hand", true); }, 2500);
     setTimeout(() => { loadHandImages(player, "playerHand", true); }, 3000);
     setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3000);
 }
