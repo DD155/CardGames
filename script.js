@@ -66,6 +66,7 @@ function deal(deck, hand, id, show) {
         if (blackjackCalculateValue(hand) > 21)
             document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " bombed!";
     }
+
 }
 
 //Postcondition: return a string from the corresponding id
@@ -123,7 +124,7 @@ function chance(probability) {
 // 4. else determine probability of getting the difference 
 // e.g hand sum is 12, you can get 9 at most, which is 9/13 (2-9, ace)
 // use this new probability to determine if AI will hit or not.
-function blackjackAI(deck, hand, id) {
+function blackjackAI(deck, hand, id, dealer) {
     if (deck < 1 || hand < 1) return; //precondition
 
     var currSum = blackjackCalculateValue(hand);
@@ -132,15 +133,15 @@ function blackjackAI(deck, hand, id) {
     //TODO: implement choice for AI to double down
 
     var diff = 21 - currSum;
-    if (diff >= 11) deal(deck, hand, id, true); //always hit in this case
+    if (diff >= 11) deal(deck, hand, id, !dealer); //always hit in this case
     else {
         if (diff == 10) var probability = 3;
         else var probability = diff;
 
-        if (chance(probability)) deal(deck, hand, id, true);
+        if (chance(probability)) deal(deck, hand, id, !dealer);
         else {
             //TODO: call "stand" function
-            console.log("Stand.");
+            console.log(id + "Stand.");
         }
     }
 }
@@ -153,6 +154,7 @@ function checkSplit(hand, isPlayer) {
     }
     return false;
 }
+
 
 function driverBlackjack() {
     var deck = createDeck();
@@ -167,8 +169,8 @@ function driverBlackjack() {
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(hand1, 0, "p4Hand", true); }, 1500);
     setTimeout(() => { loadHandImages(hand2, "p3Hand", true); }, 2000);
-    setTimeout(() => { loadHandImages(hand3, "playerHand", true); }, 2500);
-    setTimeout(() => { loadHandImages(player, "p2Hand", true); }, 3000);
+    setTimeout(() => { loadHandImages(player, "playerHand", true); }, 2500);
+    setTimeout(() => { loadHandImages(hand3, "p2Hand", true); }, 3000);
     //dealer has card face down
     setTimeout(() => { loadImage(hand1, 1, "p4Hand", false); }, 3500);
     setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3500);
@@ -176,12 +178,11 @@ function driverBlackjack() {
     //assign onclick event to the Hit button
     document.getElementById('dealButton').onclick = function () {
         deal(deck, player, 'playerHand', true);
-        blackjackAI(deck, hand1, "p4Hand");
-        blackjackAI(deck, hand2, "p3Hand");
-        blackjackAI(deck, hand3, "p2Hand");
+        blackjackAI(deck, hand1, "p4Hand", true);
+        blackjackAI(deck, hand2, "p3Hand", false);
+        blackjackAI(deck, hand3, "p2Hand", false);
     }
 
     // check if eligible to split
-    checkSplit(player, true);
-    
+    checkSplit(player, true);    
 }
