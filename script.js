@@ -148,13 +148,16 @@ function blackjackAI(deck, hand, id, dealer) {
 
 //Precondition: check if the hand has 2 cards and if they are the same rank
 function checkSplit(hand, isPlayer) {
-    if (hand.length == 2 && hand[0][0] == hand[0][1]) {
-        if (isPlayer) document.getElementById("splitButton").disabled = true;
+    if (hand.length == 2 && hand[0][0] == hand[1][0]) {
+        if (isPlayer) document.getElementById("splitButton").disabled = false;
         return true;
     }
     return false;
 }
 
+function split(hand) {
+    hand = [[hand[0]], [hand[1]]];
+}
 
 function driverBlackjack() {
     var deck = createDeck();
@@ -164,7 +167,8 @@ function driverBlackjack() {
     var hand1 = dealHand(deck, 2);
     var hand2 = dealHand(deck, 2);
     var hand3 = dealHand(deck, 2);
-    var player = dealHand(deck, 2);
+    //var player = dealHand(deck, 2);
+    var player = [[2, "D"], [2, "C"]];
     
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(hand1, 0, "p4Hand", true); }, 1500);
@@ -183,6 +187,12 @@ function driverBlackjack() {
         blackjackAI(deck, hand3, "p2Hand", false);
     }
 
+    //assign onclick event to the Split button
+    document.getElementById('splitButton').onclick = function () {
+        split(player);
+    }
+
+    document.getElementById('splitButton').disabled = true;
     // check if eligible to split
     checkSplit(player, true);    
 }
