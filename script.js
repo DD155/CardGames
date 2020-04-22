@@ -155,8 +155,18 @@ function checkSplit(hand, isPlayer) {
     return false;
 }
 
-function split(hand) {
+function split(hand, id) {
     hand = [[hand[0]], [hand[1]]];
+    var img = document.getElementById(id)
+    var child = img.lastElementChild;
+    console.log(img.childNodes.length);
+
+    while (child) {
+        img.removeChild(child);
+        child = img.lastElementChild;
+    }
+
+    console.log(hand);
 }
 
 function driverBlackjack() {
@@ -167,6 +177,7 @@ function driverBlackjack() {
     var hand1 = dealHand(deck, 2);
     var hand2 = dealHand(deck, 2);
     var hand3 = dealHand(deck, 2);
+
     //var player = dealHand(deck, 2);
     var player = [[2, "D"], [2, "C"]];
     
@@ -189,10 +200,11 @@ function driverBlackjack() {
 
     //assign onclick event to the Split button
     document.getElementById('splitButton').onclick = function () {
-        split(player);
+        split(player, 'playerHand');
     }
 
     document.getElementById('splitButton').disabled = true;
+
     // check if eligible to split
     checkSplit(player, true);    
 }
