@@ -145,10 +145,13 @@ function blackjackAI(deck, hand, id) {
     }
 }
 
-function split(hand) {
+//Precondition: check if the hand has 2 cards and if they are the same rank
+function checkSplit(hand, isPlayer) {
     if (hand.length == 2 && hand[0][0] == hand[0][1]) {
-        document.getElementById("splitButton").disabled = true;
+        if (isPlayer) document.getElementById("splitButton").disabled = true;
+        return true;
     }
+    return false;
 }
 
 function driverBlackjack() {
@@ -179,8 +182,6 @@ function driverBlackjack() {
     }
 
     // check if eligible to split
-    if (hand.length == 2 && hand[0][0] == hand[0][1]) {
-        document.getElementById("splitButton").disabled = true;
-    }
+    checkSplit(player, true);
     
 }
