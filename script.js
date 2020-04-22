@@ -145,8 +145,10 @@ function blackjackAI(deck, hand, id) {
     }
 }
 
-function dealButtonOnclick() {
-
+function split(hand) {
+    if (hand.length == 2 && hand[0][0] == hand[0][1]) {
+        document.getElementById("splitButton").disabled = true;
+    }
 }
 
 function driverBlackjack() {
@@ -158,10 +160,7 @@ function driverBlackjack() {
     var hand2 = dealHand(deck, 2);
     var hand3 = dealHand(deck, 2);
     var player = dealHand(deck, 2);
-
-
     
-
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(hand1, 0, "p4Hand", true); }, 1500);
     setTimeout(() => { loadHandImages(hand2, "p3Hand", true); }, 2000);
@@ -179,5 +178,9 @@ function driverBlackjack() {
         blackjackAI(deck, hand3, "p2Hand");
     }
 
+    // check if eligible to split
+    if (hand.length == 2 && hand[0][0] == hand[0][1]) {
+        document.getElementById("splitButton").disabled = true;
+    }
     
 }
