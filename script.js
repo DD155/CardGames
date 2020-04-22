@@ -127,22 +127,22 @@ function chance(probability) {
 function blackjackAI(deck, hand, id, dealer) {
     if (deck < 1 || hand < 1) return; //precondition
 
-    var currSum = blackjackCalculateValue(hand);
-
     //TODO: implement choice for AI to split
     //TODO: implement choice for AI to double down
 
-    var diff = 21 - currSum;
-    if (diff >= 11) deal(deck, hand, id, !dealer); //always hit in this case
-    else {
-        if (diff == 10) var probability = 3;
-        else var probability = diff;
+    var diff = 21 - blackjackCalculateValue(hand);;
+    while (diff >= 11) { //always hit in this case
+        deal(deck, hand, id, !dealer);
+        diff -= blackjackCalculateValue(hand);
+    }
+    
+    if (diff == 10) var probability = 3;
+    else var probability = diff;
 
-        if (chance(probability)) deal(deck, hand, id, !dealer);
-        else {
-            //TODO: call "stand" function
-            console.log(id + "Stand.");
-        }
+    if (chance(probability)) deal(deck, hand, id, !dealer);
+    else {
+        //TODO: call "stand" function
+        console.log(id + "Stand.");
     }
 }
 
