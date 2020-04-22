@@ -156,17 +156,20 @@ function checkSplit(hand, isPlayer) {
 }
 
 function split(hand, id) {
-    hand = [[hand[0]], [hand[1]]];
+    hand = [[hand[0]], [hand[1]]]; //set hand as 3D array, containing two 2D arrays as two hands
     var img = document.getElementById(id)
     var child = img.lastElementChild;
-    console.log(img.childNodes.length);
 
     while (child) {
         img.removeChild(child);
         child = img.lastElementChild;
     }
 
-    console.log(hand);
+    loadImage(hand[0], 0, id, true);
+    loadImage(hand[1], 0, 'playerHandSplit', true)
+
+    document.getElementById('splitButton').disabled = true;
+
 }
 
 function driverBlackjack() {
