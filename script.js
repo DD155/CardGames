@@ -160,14 +160,16 @@ function split(hand, id) {
     var img = document.getElementById(id)
     var child = img.lastElementChild;
 
-    while (child) {
+    while (child) { //remove current hand image
         img.removeChild(child);
         child = img.lastElementChild;
     }
 
+    //create two areas for the images
     loadImage(hand[0], 0, id, true);
-    loadImage(hand[1], 0, 'playerHandSplit', true)
+    loadImage(hand[1], 0, 'playerHandSplit', true);
 
+    //disable split button
     document.getElementById('splitButton').disabled = true;
 
 }
