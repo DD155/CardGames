@@ -16,18 +16,18 @@
 
 #player2Area {
     /*float:left;*/
-    position:absolute;
+    position: absolute;
     left: 50px;
-    bottom: 250px;
-    
-    
+    bottom: 100px;
+    width: 400px;
 }
 
 #player3Area {
     /*float: right;*/
+    width: 400px;
     position:absolute;
     right: 50px;
-    bottom: 250px;
+    bottom: 100px;
 }
 #opening{
     visibility:hidden;
