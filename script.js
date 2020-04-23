@@ -59,6 +59,8 @@ function loadHandImages(hand, id, show) {
 function deal(deck, hand, id, show) {
     if (deck.length < 1) return;
 
+    //var h = hand.
+
     if (blackjackCalculateValue(hand) < 21) { //check if you can get another card
         hand.push(deck.pop());
         loadImage(hand, hand.length - 1, id, show);
@@ -73,20 +75,14 @@ function deal(deck, hand, id, show) {
 
 //Postcondition: return a string from the corresponding id
 function generateNameString(id) {
-    switch (id) {
-        case "playerHand":
-            return "Player 1 (You)";
-            break;
-        case "p4Hand":
-            return "Player 4";
-            break;
-        case "p3Hand":
-            return "Player 3";
-            break;
-        case "p2Hand":
-            return "Player 2";
-            break;
-    }
+    if (id == "playerHand" || id == "playerHandSplit") 
+        return "Player 1 (You)";
+    else if (id == "p4Hand")
+        return "Player 4";
+    else if (id == "p3Hand")
+        return "Player 3";
+    else 
+        return "Player 2";
 }
 
 //Precondition: hand size must be greater than 0.
@@ -158,7 +154,7 @@ function checkSplit(hand, isPlayer) {
 }
 
 function split(hand, id) {
-    hand = [[hand[0]], [hand[1]]]; //set hand as 3D array, containing two 2D arrays as two hands
+    var newHand = [[hand[0]], [hand[1]]]
     var img = document.getElementById(id)
     var child = img.lastElementChild;
 
@@ -168,11 +164,13 @@ function split(hand, id) {
     }
 
     //create two areas for the images
-    loadImage(hand[0], 0, id, true);
-    loadImage(hand[1], 0, 'playerHandSplit', true);
+    loadImage(newHand[0], 0, id, true);
+    loadImage(newHand[1], 0, 'playerHandSplit', true);
 
     //disable split button
     document.getElementById('splitButton').disabled = true;
+
+    return newHand; //set hand as 3D array, containing two 2D arrays as two hands
 
 }
 
@@ -188,9 +186,11 @@ function driverBlackjack() {
     var hand1 = dealHand(deck, 2);
     var hand2 = dealHand(deck, 2);
     var hand3 = dealHand(deck, 2);
-
+    
     //var player = dealHand(deck, 2);
     var player = [[2, "D"], [2, "C"]];
+
+    var isSplit = false;
     
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(hand1, 0, "p4Hand", true); }, 1500);
@@ -203,7 +203,8 @@ function driverBlackjack() {
 
     //assign onclick event to the Hit button
     document.getElementById('dealButton').onclick = function () {
-        deal(deck, player, 'playerHand', true);
+        if (isSplit) deal(deck, player[1], 'playerHandSplit', true);
+        else deal(deck, player[0], 'playerHand', true);
         blackjackAI(deck, hand1, "p4Hand", true);
         blackjackAI(deck, hand2, "p3Hand", false);
         blackjackAI(deck, hand3, "p2Hand", false);
@@ -211,11 +212,17 @@ function driverBlackjack() {
 
     //assign onclick event to the Split button
     document.getElementById('splitButton').onclick = function () {
-        split(player, 'playerHand');
+        player = split(player, 'playerHand');
+        isSplit = true;
+        console.log(player);
+        console.log(player[0]);
+        console.log(player[1]);
     }
 
     document.getElementById('splitButton').disabled = true;
 
     // check if eligible to split
     checkSplit(player, true);    
+
+    console.log(player);
 }
