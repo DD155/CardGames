@@ -11,10 +11,9 @@
 <body onload="driverBlackjack();">
     <button id="backButton" onclick="location.href='/CodingProjects/Web/CardGames/CardsHomePage.html'">Back</button>
     <h1 style="text-align:center">Blackjack</h1>
-    <!--<p id="opening">Welcome to the game! Currently dealing... </p>-->
     <div id="gameArea">
         <div id="gameActions">
-            <b id="actionText" style="color:white">Welcome to the game! Currently dealing...</b>
+            <b id="actionText">Welcome to the game! Currently dealing...</b>
         </div>
         <div id="player4Area">
             <br /> <b style="color:white">Player 4 (Dealer) <br /> Bets: </b>
@@ -23,10 +22,11 @@
             <br /> <br /> <br />
         </div>
         <div>
+            <button id="dealButton"> Hit </button>
+            <button id="stayButton"> Stand </button> <br />
             <button id="splitButton"> Split </button>
             <button id="doubleButton" disabled> Double Down </button>
-            <button id="dealButton"> Hit </button>
-            <button id="stayButton"> Stand </button>
+
         </div>
         <div id="player3Area">
             <b style="color:white">Player 3 <br /> Bets: </b>
@@ -40,7 +40,7 @@
         </div>
         <br /> <br /> <br />
         <div id="player1Area">
-            <b style="color:white">Player (You) <br /> Bets: </b>
+            <b style="color: white">Player (You) <br /> Bets: </b>
             <b id="playerBet" style="color:white"> 0 </b>
             <p id="playerHand"></p>
             <p id="playerHandSplit"></p>

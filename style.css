@@ -18,7 +18,7 @@
     /*float:left;*/
     position: absolute;
     left: 50px;
-    bottom: 100px;
+    bottom: 150px;
     width: 400px;
 }
 
@@ -27,11 +27,12 @@
     width: 400px;
     position:absolute;
     right: 50px;
-    bottom: 100px;
+    bottom: 150px;
 }
-#opening{
-    visibility:hidden;
-    text-align:center;
+
+
+#actionText {
+    color: white;
 }
 
 #playerHandSplit{
@@ -58,10 +59,12 @@
     background-color: white;
 }
 
-#gameActions{
-    text-align:left;
-    position:absolute;
-   
+#gameActions {
+    text-align: left;
+    position: absolute;
+    overflow: auto;
+    height: 150px;
+    width: 300px;
 }
 
 #backButton {
