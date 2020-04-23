@@ -67,6 +67,8 @@ function deal(deck, hand, id, show) {
             document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " bombed!";
     }
 
+    updateScroll();
+
 }
 
 //Postcondition: return a string from the corresponding id
@@ -172,6 +174,10 @@ function split(hand, id) {
     //disable split button
     document.getElementById('splitButton').disabled = true;
 
+}
+
+function updateScroll() {
+    document.getElementById('gameActions').scrollTop = document.getElementById('gameActions').scrollHeight;
 }
 
 function driverBlackjack() {
