@@ -1,3 +1,6 @@
+var isSplit = false;
+
+
 //Postcondition: Returns a 2D array that contains a deck of 52 cards in array form [rank, suit].
 function createDeck() {
     var deck = [];
@@ -75,7 +78,6 @@ function deal(deck, hand, id, show) {
 
 //Postcondition: return a string from the corresponding id
 function generateNameString(id) {
-    
     switch (id) {
         case "playerHand":
         case "playerHandSplit":
@@ -173,6 +175,8 @@ function split(hand, id) {
     loadImage(newHand[0], 0, id, true);
     loadImage(newHand[1], 0, 'playerHandSplit', true);
 
+    document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " split their hand.";
+
     //disable split button
     document.getElementById('splitButton').disabled = true;
 
@@ -180,6 +184,7 @@ function split(hand, id) {
 
 }
 
+//Postcondition: keep scrollbar on the bottom
 function updateScroll() {
     document.getElementById('gameActions').scrollTop = document.getElementById('gameActions').scrollHeight;
 }
@@ -196,7 +201,7 @@ function driverBlackjack() {
     //var player = dealHand(deck, 2);
     var player = [[2, "D"], [2, "C"]];
 
-    var isSplit = false;
+    //var isSplit = false;
     
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(hand1, 0, "p4Hand", true); }, 1500);
