@@ -75,14 +75,20 @@ function deal(deck, hand, id, show) {
 
 //Postcondition: return a string from the corresponding id
 function generateNameString(id) {
-    if (id == "playerHand" || id == "playerHandSplit") 
-        return "Player 1 (You)";
-    else if (id == "p4Hand")
-        return "Player 4";
-    else if (id == "p3Hand")
-        return "Player 3";
-    else 
-        return "Player 2";
+    
+    switch (id) {
+        case "playerHand":
+        case "playerHandSplit":
+            return "Player 1 (You)";
+        case "p4Hand":
+            return "Player 4";
+        case "p3Hand":
+            return "Player 3";
+        case "p2Hand":
+            return "Player 2";
+        default:
+            break;
+    }
 }
 
 //Precondition: hand size must be greater than 0.
