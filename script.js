@@ -1,6 +1,12 @@
 var isSplit = false; //var for if player can split
 var isBustPlayer = false, isBustP4 = false, isBustP3 = false, isBustP2 = false; //vars for when hands over 21
 
+/*
+######################################################################################################################
+                                                DECK FUNCTIONS
+######################################################################################################################
+*/
+
 
 //Postcondition: Returns a 2D array that contains a deck of 52 cards in array form [rank, suit].
 function createDeck() {
@@ -40,6 +46,32 @@ function dealHand(deck, amount) {
     return arr;
 }
 
+//Precondition: deck is not empty
+//Postcondition: adds one card to the hand array
+function deal(deck, hand, id, show) {
+    if (deck.length < 1) return;
+
+    if (blackjackCalculateValue(hand) < 21) { //check if you can get another card
+        hand.push(deck.pop());
+        loadImage(hand, hand.length - 1, id, show);
+        document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " hit.";
+        if (blackjackCalculateValue(hand) > 21) { // player busts
+            document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " busted!";
+            changeBust(id, true);
+            setTimeout(() => { removeHandImgs(id); }, 500);
+        }
+    }
+
+    updateScroll();
+}
+
+
+/* 
+######################################################################################################################
+                                                UTILITY FUNCTIONS 
+######################################################################################################################
+*/
+
 //Postcondition: display image corresponding to the current card. "show" parameter checks is card is 
 //face up or not
 function loadImage(hand, index, id, show) {
@@ -58,24 +90,25 @@ function loadHandImages(hand, id, show) {
         loadImage(hand, i, id, show);
 }
 
-//Precondition: deck is not empty
-//Postcondition: adds one card to the hand array
-function deal(deck, hand, id, show) {
-    if (deck.length < 1) return;
+function removeHandImgs(id) {
+    var img = document.getElementById(id)
+    var child = img.lastElementChild;
 
-    if (blackjackCalculateValue(hand) < 21) { //check if you can get another card
-        hand.push(deck.pop());
-        loadImage(hand, hand.length - 1, id, show);
-        document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " hit.";
-        if (blackjackCalculateValue(hand) > 21) { // player busts
-            document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " busted!";
-            changeBust(id, true);
-            setTimeout(() => { removeHandImgs(id); }, 500);
-        }
+    while (child) { //remove current hand image
+        img.removeChild(child);
+        child = img.lastElementChild;
     }
+}
 
-    updateScroll();
+//Postcondition: keep scrollbar on the bottom
+function updateScroll() {
+    document.getElementById('gameActions').scrollTop = document.getElementById('gameActions').scrollHeight;
+}
 
+//Postcondition: return a boolean depending on if the chance of getting the desired card is high enough
+function chance(probability) {
+    if (Math.random() * 13 <= probability) return true;
+    return false;
 }
 
 //Postcondition: return a string from the corresponding id
@@ -111,6 +144,12 @@ function changeBust(id, isBust) {
     }
 }
 
+/*
+######################################################################################################################
+                                                BLACKJACK FUNCTIONS
+######################################################################################################################
+*/
+
 //Precondition: hand size must be greater than 0.
 function blackjackCalculateValue(hand) {
     if (hand.length < 1) return; //precondition
@@ -133,11 +172,6 @@ function blackjackCalculateValue(hand) {
     return sum;
 }
 
-//Postcondition: return a boolean depending on if the chance of getting the desired card is high enough
-function chance(probability) {
-    if (Math.random() * 13 <= probability) return true;
-    return false;
-}
 
 // Precondition: deck is not empty, hand is not empty
 // Postcondition: the AI has chosen to either hit or stay
@@ -156,14 +190,14 @@ function blackjackAI(deck, hand, id) {
 
     var diff = 21 - blackjackCalculateValue(hand);;
     while (diff >= 11) { //always hit in this case
-        deal(deck, hand, id, show);
+        deal(deck, hand, id, true);
         diff -= blackjackCalculateValue(hand);
     }
     
     if (diff == 10) var probability = 3;
     else var probability = diff;
 
-    if (chance(probability)) deal(deck, hand, id, show);
+    if (chance(probability)) deal(deck, hand, id, true);
     else {
         //TODO: call "stand" function
         console.log(id + "Stand.");
@@ -178,6 +212,8 @@ function blackjackAI(deck, hand, id) {
 //5. If the dealer has a natural, players must pay dealer bets. 
 
 function dealerAI(deck, hand) {
+    removeHandImgs("player4Area"); 
+
 
     if (blackjackCalculateValue(hand) >= 17) return; //dealer MUST stand if total is 17 or higher
 
@@ -191,16 +227,6 @@ function checkSplit(hand, isPlayer) {
     }
     document.getElementById("splitButton").disabled = true;
     return false;
-}
-
-function removeHandImgs(id) {
-    var img = document.getElementById(id)
-    var child = img.lastElementChild;
-
-    while (child) { //remove current hand image
-        img.removeChild(child);
-        child = img.lastElementChild;
-    }
 }
 
 function split(hand, id) {
@@ -221,10 +247,6 @@ function split(hand, id) {
 
 }
 
-//Postcondition: keep scrollbar on the bottom
-function updateScroll() {
-    document.getElementById('gameActions').scrollTop = document.getElementById('gameActions').scrollHeight;
-}
 
 function driverBlackjack() {
     var deck = createDeck();
