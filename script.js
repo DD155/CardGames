@@ -1,5 +1,5 @@
-var isSplit = false;
-var isBombPlayer = false, isBombP4 = false, isBombP3 = false, isBombP2 = false;
+var isSplit = false; //var for if player can split
+var isBombPlayer = false, isBombP4 = false, isBombP3 = false, isBombP2 = false; //vars for when hands bomb
 
 
 //Postcondition: Returns a 2D array that contains a deck of 52 cards in array form [rank, suit].
@@ -63,15 +63,14 @@ function loadHandImages(hand, id, show) {
 function deal(deck, hand, id, show) {
     if (deck.length < 1) return;
 
-    //var h = hand.
-
     if (blackjackCalculateValue(hand) < 21) { //check if you can get another card
         hand.push(deck.pop());
         loadImage(hand, hand.length - 1, id, show);
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " hit.";
-        if (blackjackCalculateValue(hand) > 21) {
+        if (blackjackCalculateValue(hand) > 21) { // player bombs
             document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " bombed!";
             changeBomb(id, true);
+            removeHandImgs(id);
         }
     }
 
@@ -177,11 +176,11 @@ function checkSplit(hand, isPlayer) {
         if (isPlayer) document.getElementById("splitButton").disabled = false;
         return true;
     }
+    document.getElementById("splitButton").disabled = true;
     return false;
 }
 
-function split(hand, id) {
-    var newHand = [[hand[0]], [hand[1]]]
+function removeHandImgs(id) {
     var img = document.getElementById(id)
     var child = img.lastElementChild;
 
@@ -189,6 +188,12 @@ function split(hand, id) {
         img.removeChild(child);
         child = img.lastElementChild;
     }
+}
+
+function split(hand, id) {
+    var newHand = [[hand[0]], [hand[1]]]
+
+    removeHandImgs(id);
 
     //create two areas for the images
     loadImage(newHand[0], 0, id, true);
@@ -233,8 +238,13 @@ function driverBlackjack() {
 
     //assign onclick event to the Hit button
     document.getElementById('dealButton').onclick = function () {
+        //case when split is available
         if (isSplit && !isBombPlayer) deal(deck, player[1], 'playerHandSplit', true);
-        else deal(deck, player[0], 'playerHand', true);
+        else if (isSplit && isBombPlayer) deal(deck, player[0], 'playerHand', true);
+        else deal(deck, player, 'playerHand', true);
+
+        checkSplit(player, true);    
+
         blackjackAI(deck, hand1, "p4Hand", true);
         blackjackAI(deck, hand2, "p3Hand", false);
         blackjackAI(deck, hand3, "p2Hand", false);
