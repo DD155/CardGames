@@ -254,6 +254,12 @@ function driverBlackjack() {
 
         checkSplit(player, true);    
 
+        //blackjackAI(deck, hand1, "p4Hand", true);
+        //blackjackAI(deck, hand2, "p3Hand", false);
+        //blackjackAI(deck, hand3, "p2Hand", false);
+    }
+
+    document.getElementById('standButton').onclick = function () {
         blackjackAI(deck, hand1, "p4Hand", true);
         blackjackAI(deck, hand2, "p3Hand", false);
         blackjackAI(deck, hand3, "p2Hand", false);
