@@ -2,7 +2,7 @@
 A collection of different classic playing card games built with HTML, JS, CSS.
 
 Games:  
-Blackjack (70%)  
+Blackjack (75%)  
 Poker  
 
 Future:  
