@@ -148,7 +148,7 @@ function chance(probability) {
 // 4. else determine probability of getting the difference 
 // e.g hand sum is 12, you can get 9 at most, which is 9/13 (2-9, ace)
 // use this new probability to determine if AI will hit or not.
-function blackjackAI(deck, hand, id, dealer) {
+function blackjackAI(deck, hand, id) {
     if (deck < 1 || hand < 1) return; //precondition
 
     //TODO: implement choice for AI to split
@@ -156,18 +156,31 @@ function blackjackAI(deck, hand, id, dealer) {
 
     var diff = 21 - blackjackCalculateValue(hand);;
     while (diff >= 11) { //always hit in this case
-        deal(deck, hand, id, !dealer);
+        deal(deck, hand, id, show);
         diff -= blackjackCalculateValue(hand);
     }
     
     if (diff == 10) var probability = 3;
     else var probability = diff;
 
-    if (chance(probability)) deal(deck, hand, id, !dealer);
+    if (chance(probability)) deal(deck, hand, id, show);
     else {
         //TODO: call "stand" function
         console.log(id + "Stand.");
     }
+}
+
+//1. When the dealer has served every player, the dealers face-down card is turned up.
+//2. If the total is 17 or more, it must stand. If the total is 16 or under, they must take a card.
+//3. The dealer must continue to take cards until the total is 17 or more, at which point the dealer must stand.
+//4. If the dealer has an ace, and counting it as 11 would bring the total to 17 or more (but not over 21)
+//the dealer must count the ace as 11 and stand.
+//5. If the dealer has a natural, players must pay dealer bets. 
+
+function dealerAI(deck, hand) {
+
+    if (blackjackCalculateValue(hand) >= 17) return; //dealer MUST stand if total is 17 or higher
+
 }
 
 //Precondition: check if the hand has 2 cards and if they are the same rank
@@ -260,9 +273,9 @@ function driverBlackjack() {
     }
 
     document.getElementById('standButton').onclick = function () {
-        blackjackAI(deck, hand1, "p4Hand", true);
-        blackjackAI(deck, hand2, "p3Hand", false);
-        blackjackAI(deck, hand3, "p2Hand", false);
+        //TODO: call dealerAI();
+        blackjackAI(deck, hand2, "p3Hand");
+        blackjackAI(deck, hand3, "p2Hand");
     }
 
     //assign onclick event to the Split button
