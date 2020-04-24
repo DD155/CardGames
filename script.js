@@ -200,7 +200,6 @@ function blackjackAI(deck, hand, id) {
     if (chance(probability)) deal(deck, hand, id, true);
     else {
         //TODO: call "stand" function
-        console.log(id + "Stand.");
     }
 }
 
@@ -304,9 +303,6 @@ function driverBlackjack() {
     document.getElementById('splitButton').onclick = function () {
         player = split(player, 'playerHand');
         isSplit = true;
-        console.log(player);
-        console.log(player[0]);
-        console.log(player[1]);
     }
 
     //split button is disabled by default
@@ -314,6 +310,4 @@ function driverBlackjack() {
 
     // check if eligible to split
     checkSplit(player, true);    
-
-    console.log(player);
 }
