@@ -217,6 +217,15 @@ function driverBlackjack() {
     var deck = createDeck();
     shuffle(deck);
 
+    var betPlayer, betP2, betP3, betDealer;
+    betPlayer = betP2 = betP3 = 500;
+    betDealer = 1500;
+
+    document.getElementById("p4Bet").innerHTML = betDealer;
+    document.getElementById("p3Bet").innerHTML = betP3;
+    document.getElementById("p2Bet").innerHTML = betP2;
+    document.getElementById("playerBet").innerHTML = betPlayer;
+
     //create hands for the players
     var hand1 = dealHand(deck, 2);
     var hand2 = dealHand(deck, 2);
