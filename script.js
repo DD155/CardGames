@@ -1,5 +1,5 @@
 var isSplit = false; //var for if player can split
-var isBombPlayer = false, isBombP4 = false, isBombP3 = false, isBombP2 = false; //vars for when hands bomb
+var isBustPlayer = false, isBustP4 = false, isBustP3 = false, isBustP2 = false; //vars for when hands over 21
 
 
 //Postcondition: Returns a 2D array that contains a deck of 52 cards in array form [rank, suit].
@@ -67,9 +67,9 @@ function deal(deck, hand, id, show) {
         hand.push(deck.pop());
         loadImage(hand, hand.length - 1, id, show);
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " hit.";
-        if (blackjackCalculateValue(hand) > 21) { // player bombs
-            document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " bombed!";
-            changeBomb(id, true);
+        if (blackjackCalculateValue(hand) > 21) { // player busts
+            document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " busted!";
+            changeBust(id, true);
             setTimeout(() => { removeHandImgs(id); }, 500);
         }
     }
@@ -95,17 +95,17 @@ function generateNameString(id) {
     }
 }
 
-function changeBomb(id, isBomb) {
+function changeBust(id, isBust) {
     switch (id) {
         case "playerHand":
         case "playerHandSplit":
-            isBombPlayer = isBomb;
+            isBustPlayer = isBust;
         case "p4Hand":
-            isBombP4 = isBomb;
+            isBustP4 = isBust;
         case "p3Hand":
-            isBombP3 = isBomb;
+            isBustP3 = isBust;
         case "p2Hand":
-            isBombP2 = isBomb;
+            isBustP2 = isBust;
         default:
             break;
     }
@@ -218,8 +218,8 @@ function driverBlackjack() {
     shuffle(deck);
 
     var betPlayer, betP2, betP3, betDealer;
-    betPlayer = betP2 = betP3 = 500;
-    betDealer = 1500;
+    betPlayer = betP2 = betP3 = 50;
+    betDealer = 100;
 
     document.getElementById("p4Bet").innerHTML = betDealer;
     document.getElementById("p3Bet").innerHTML = betP3;
@@ -248,8 +248,8 @@ function driverBlackjack() {
     //assign onclick event to the Hit button
     document.getElementById('dealButton').onclick = function () {
         //case when split is available
-        if (isSplit && !isBombPlayer) deal(deck, player[1], 'playerHandSplit', true);
-        else if (isSplit && isBombPlayer) deal(deck, player[0], 'playerHand', true);
+        if (isSplit && !isBustPlayer) deal(deck, player[1], 'playerHandSplit', true);
+        else if (isSplit && isBustPlayer) deal(deck, player[0], 'playerHand', true);
         else deal(deck, player, 'playerHand', true);
 
         checkSplit(player, true);    
@@ -268,6 +268,7 @@ function driverBlackjack() {
         console.log(player[1]);
     }
 
+    //split button is disabled by default
     document.getElementById('splitButton').disabled = true;
 
     // check if eligible to split
