@@ -70,7 +70,7 @@ function deal(deck, hand, id, show) {
         if (blackjackCalculateValue(hand) > 21) { // player bombs
             document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " bombed!";
             changeBomb(id, true);
-            removeHandImgs(id);
+            setTimeout(() => { removeHandImgs(id); }, 500);
         }
     }
 
