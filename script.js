@@ -1,4 +1,5 @@
 var isSplit = false;
+var isBombPlayer = false, isBombP4 = false, isBombP3 = false, isBombP2 = false;
 
 
 //Postcondition: Returns a 2D array that contains a deck of 52 cards in array form [rank, suit].
@@ -68,8 +69,10 @@ function deal(deck, hand, id, show) {
         hand.push(deck.pop());
         loadImage(hand, hand.length - 1, id, show);
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " hit.";
-        if (blackjackCalculateValue(hand) > 21)
+        if (blackjackCalculateValue(hand) > 21) {
             document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " bombed!";
+            changeBomb(id, true);
+        }
     }
 
     updateScroll();
@@ -88,6 +91,22 @@ function generateNameString(id) {
             return "Player 3";
         case "p2Hand":
             return "Player 2";
+        default:
+            break;
+    }
+}
+
+function changeBomb(id, isBomb) {
+    switch (id) {
+        case "playerHand":
+        case "playerHandSplit":
+            isBombPlayer = isBomb;
+        case "p4Hand":
+            isBombP4 = isBomb;
+        case "p3Hand":
+            isBombP3 = isBomb;
+        case "p2Hand":
+            isBombP2 = isBomb;
         default:
             break;
     }
@@ -214,7 +233,7 @@ function driverBlackjack() {
 
     //assign onclick event to the Hit button
     document.getElementById('dealButton').onclick = function () {
-        if (isSplit) deal(deck, player[1], 'playerHandSplit', true);
+        if (isSplit && !isBombPlayer) deal(deck, player[1], 'playerHandSplit', true);
         else deal(deck, player[0], 'playerHand', true);
         blackjackAI(deck, hand1, "p4Hand", true);
         blackjackAI(deck, hand2, "p3Hand", false);
