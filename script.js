@@ -58,7 +58,7 @@ function deal(deck, hand, id, show) {
         if (blackjackCalculateValue(hand) > 21) { // player busts
             document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " busted!";
             changeBust(id, true);
-            setTimeout(() => { removeHandImgs(id); }, 500);
+            setTimeout(() => { removeHandImgs(id); }, 1000);
         }
     }
 
@@ -211,10 +211,21 @@ function blackjackAI(deck, hand, id) {
 //5. If the dealer has a natural, players must pay dealer bets. 
 
 function dealerAI(deck, hand) {
+    var ctr = 1;
+
+    //show hand
     removeHandImgs("p4Hand"); 
     loadHandImages(hand, 'p4Hand', true);
 
+    //hit
     if (blackjackCalculateValue(hand) >= 17) return; //dealer MUST stand if total is 17 or higher
+    else {
+        while (blackjackCalculateValue(hand) < 17) {
+            //setTimeout(() => { deal(deck, hand, "p4Hand", true); }, (500 * ctr));
+            deal(deck, hand, "p4Hand", true);
+            ctr++;
+        }
+    }
 
 }
 
