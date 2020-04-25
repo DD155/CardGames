@@ -132,15 +132,14 @@ function generateNameString(id) {
 }
 
 function changeBust(id, isBust) {
-    switch (id) {
-        case "playerHand":
-        case "playerHandSplit":
+    switch (id[1]) {
+        case "l":
             isBustPlayer = isBust;
-        case "p4Hand":
+        case "4":
             isBustP4 = isBust;
-        case "p3Hand":
+        case "3":
             isBustP3 = isBust;
-        case "p2Hand":
+        case "2":
             isBustP2 = isBust;
         default:
             break;
@@ -214,7 +213,6 @@ function blackjackAI(deck, hand, id) {
 //5. If the dealer has a natural, players must pay dealer bets. 
 
 function dealerAI(deck, hand) {
-    var ctr = 1;
 
     //show hand
     removeHandImgs("p4Hand"); 
@@ -224,12 +222,13 @@ function dealerAI(deck, hand) {
     if (blackjackCalculateValue(hand) >= 17) return; //dealer MUST stand if total is 17 or higher
     else {
         while (blackjackCalculateValue(hand) < 17) {
-            //setTimeout(() => { deal(deck, hand, "p4Hand", true); }, (500 * ctr));
             deal(deck, hand, "p4Hand", true);
-            ctr++;
         }
     }
 
+    if (blackjackCalculateValue(hand) > 21) {
+        changeBust()
+    }
 }
 
 //Precondition: check if the hand has 2 cards and if they are the same rank
@@ -285,7 +284,8 @@ function driverBlackjack() {
     document.getElementById("playerBet").innerHTML = betPlayer;
 
     //create hands for the players
-    var hand1 = dealHand(deck, 2);
+    //var hand1 = dealHand(deck, 2);
+    var hand1 = [[10, "D"], [10, "C"], [2, "C"]];
     var hand2 = dealHand(deck, 2);
     var hand3 = dealHand(deck, 2);
     
@@ -303,7 +303,6 @@ function driverBlackjack() {
     setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3500);
 
     //check for 21
-    setTimeout(() => { haveNatural(hand1, betDealer, "p4Bet"); }, 4000);
     setTimeout(() => { haveNatural(hand2, betP2, "p3Bet"); }, 4000);
     setTimeout(() => { haveNatural(hand3, betP3, "p2Bet"); }, 4000);
     setTimeout(() => { haveNatural(player, betPlayer, "playerBet"); }, 4000);
@@ -330,6 +329,18 @@ function driverBlackjack() {
         blackjackAI(deck, hand2, "p3Hand");
         blackjackAI(deck, hand3, "p2Hand");
         dealerAI(deck, hand1);
+
+        if (isBustP4) {
+            switch (false) {
+                case isBustPlayer:
+                    modifyBet("playerBet", 2 * betPlayer);
+                case isBustP2:
+                    modifyBet("p2Bet", 2 * betP2);
+                case isBustP3:
+                    modifyBet("p3Bet", 2 * betP3);
+                default: break;
+            }
+        }
 
     }
 
