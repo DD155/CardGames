@@ -211,8 +211,8 @@ function blackjackAI(deck, hand, id) {
 //5. If the dealer has a natural, players must pay dealer bets. 
 
 function dealerAI(deck, hand) {
-    removeHandImgs("player4Area"); 
-
+    removeHandImgs("p4Hand"); 
+    loadHandImages(hand, 'p4Hand', true);
 
     if (blackjackCalculateValue(hand) >= 17) return; //dealer MUST stand if total is 17 or higher
 
@@ -294,9 +294,10 @@ function driverBlackjack() {
     }
 
     document.getElementById('standButton').onclick = function () {
-        //TODO: call dealerAI();
         blackjackAI(deck, hand2, "p3Hand");
         blackjackAI(deck, hand3, "p2Hand");
+        dealerAI(deck, hand1);
+
     }
 
     //assign onclick event to the Split button
