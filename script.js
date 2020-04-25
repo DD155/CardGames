@@ -218,6 +218,12 @@ function dealerAI(deck, hand) {
     removeHandImgs("p4Hand"); 
     loadHandImages(hand, 'p4Hand', true);
 
+    if (blackjackCalculateValue(hand) > 21) {
+        changeBust("p4", true);
+        document.getElementById("actionText").innerHTML += '<br />' + "The dealer busted!";
+        return;
+    }
+
     //hit
     if (blackjackCalculateValue(hand) >= 17) return; //dealer MUST stand if total is 17 or higher
     else {
@@ -226,9 +232,7 @@ function dealerAI(deck, hand) {
         }
     }
 
-    if (blackjackCalculateValue(hand) > 21) {
-        changeBust()
-    }
+    
 }
 
 //Precondition: check if the hand has 2 cards and if they are the same rank
@@ -243,6 +247,7 @@ function checkSplit(hand, isPlayer) {
 
 function haveNatural(hand, bet, id) {
     if (blackjackCalculateValue(hand) == 21) {
+        //bet = bet * 1.5;
         modifyBet(id, bet * 1.5);
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " has a natural!";
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " got paid $" + ((bet * 1.5) - bet) + ".";
@@ -333,10 +338,13 @@ function driverBlackjack() {
         if (isBustP4) {
             switch (false) {
                 case isBustPlayer:
+                    document.getElementById("actionText").innerHTML += "<br />" + "Player (You) now has $" + 2 * betPlayer + ".";
                     modifyBet("playerBet", 2 * betPlayer);
                 case isBustP2:
+                    document.getElementById("actionText").innerHTML += "<br />" + "Player 2 now has $" + 2 * betP2 + ".";
                     modifyBet("p2Bet", 2 * betP2);
                 case isBustP3:
+                    document.getElementById("actionText").innerHTML += "<br />" + "Player 3 now has $" + 2 * betP3 + ".";
                     modifyBet("p3Bet", 2 * betP3);
                 default: break;
             }
