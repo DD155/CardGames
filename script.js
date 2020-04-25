@@ -100,6 +100,10 @@ function removeHandImgs(id) {
     }
 }
 
+function modifyBet(id, amount) {
+    document.getElementById(id).innerHTML = amount;
+}
+
 //Postcondition: keep scrollbar on the bottom
 function updateScroll() {
     document.getElementById('gameActions').scrollTop = document.getElementById('gameActions').scrollHeight;
@@ -113,15 +117,14 @@ function chance(probability) {
 
 //Postcondition: return a string from the corresponding id
 function generateNameString(id) {
-    switch (id) {
-        case "playerHand":
-        case "playerHandSplit":
+    switch (id[1]) {
+        case "l":
             return "Player 1 (You)";
-        case "p4Hand":
+        case "4":
             return "Player 4";
-        case "p3Hand":
+        case "3":
             return "Player 3";
-        case "p2Hand":
+        case "2":
             return "Player 2";
         default:
             break;
@@ -239,6 +242,15 @@ function checkSplit(hand, isPlayer) {
     return false;
 }
 
+function haveNatural(hand, bet, id) {
+    if (blackjackCalculateValue(hand) == 21) {
+        modifyBet(id, bet * 1.5);
+        document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " has a natural!";
+        document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " got paid $" + ((bet * 1.5) - bet) + ".";
+
+    }
+}
+
 function split(hand, id) {
     var newHand = [[hand[0]], [hand[1]]]
 
@@ -262,9 +274,10 @@ function driverBlackjack() {
     var deck = createDeck();
     shuffle(deck);
 
+    //set bets for players
     var betPlayer, betP2, betP3, betDealer;
     betPlayer = betP2 = betP3 = 50;
-    betDealer = 100;
+    betDealer = 0;
 
     document.getElementById("p4Bet").innerHTML = betDealer;
     document.getElementById("p3Bet").innerHTML = betP3;
@@ -277,9 +290,8 @@ function driverBlackjack() {
     var hand3 = dealHand(deck, 2);
     
     //var player = dealHand(deck, 2);
-    var player = [[2, "D"], [2, "C"]];
+    var player = [[10, "D"], ['A', "C"]];
 
-    //var isSplit = false;
     
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(hand1, 0, "p4Hand", true); }, 1500);
@@ -289,6 +301,15 @@ function driverBlackjack() {
     //dealer has card face down
     setTimeout(() => { loadImage(hand1, 1, "p4Hand", false); }, 3500);
     setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3500);
+
+    //check for 21
+    setTimeout(() => { haveNatural(hand1, betDealer, "p4Bet"); }, 4000);
+    setTimeout(() => { haveNatural(hand2, betP2, "p3Bet"); }, 4000);
+    setTimeout(() => { haveNatural(hand3, betP3, "p2Bet"); }, 4000);
+    setTimeout(() => { haveNatural(player, betPlayer, "playerBet"); }, 4000);
+
+    
+
 
     //assign onclick event to the Hit button
     document.getElementById('dealButton').onclick = function () {
@@ -304,6 +325,7 @@ function driverBlackjack() {
         //blackjackAI(deck, hand3, "p2Hand", false);
     }
 
+    //assign onclick to Stand button
     document.getElementById('standButton').onclick = function () {
         blackjackAI(deck, hand2, "p3Hand");
         blackjackAI(deck, hand3, "p2Hand");
@@ -322,4 +344,6 @@ function driverBlackjack() {
 
     // check if eligible to split
     checkSplit(player, true);    
+
+
 }
