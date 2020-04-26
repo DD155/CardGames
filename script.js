@@ -1,5 +1,8 @@
 var isSplit = false; //var for if player can split
-var isBustPlayer = false, isBustP4 = false, isBustP3 = false, isBustP2 = false; //vars for when hands over 21
+var isBustPlayer = false;
+var isBustP4 = false;
+var isBustP3 = false;
+var isBustP2 = false; //vars for when hands over 21
 
 /*
 ######################################################################################################################
@@ -57,7 +60,7 @@ function deal(deck, hand, id, show) {
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " hit.";
         if (blackjackCalculateValue(hand) > 21) { // player busts
             document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " busted!";
-            changeBust(id, true);
+            //changeBust(id, true);
             setTimeout(() => { removeHandImgs(id); }, 1000);
         }
     }
@@ -211,9 +214,7 @@ function blackjackAI(deck, hand, id) {
 //4. If the dealer has an ace, and counting it as 11 would bring the total to 17 or more (but not over 21)
 //the dealer must count the ace as 11 and stand.
 //5. If the dealer has a natural, players must pay dealer bets. 
-
 function dealerAI(deck, hand) {
-
     //show hand
     removeHandImgs("p4Hand"); 
     loadHandImages(hand, 'p4Hand', true);
@@ -247,11 +248,9 @@ function checkSplit(hand, isPlayer) {
 
 function haveNatural(hand, bet, id) {
     if (blackjackCalculateValue(hand) == 21) {
-        //bet = bet * 1.5;
-        modifyBet(id, bet * 1.5);
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " has a natural!";
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " got paid $" + ((bet * 1.5) - bet) + ".";
-
+        document.getElementById(id).innerHTML = bet * 1.5;
     }
 }
 
@@ -308,12 +307,9 @@ function driverBlackjack() {
     setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3500);
 
     //check for 21
-    setTimeout(() => { haveNatural(hand2, betP2, "p3Bet"); }, 4000);
+    setTimeout(() => { haveNatural(hand2, betP2, "p3Bet");  }, 4000);
     setTimeout(() => { haveNatural(hand3, betP3, "p2Bet"); }, 4000);
     setTimeout(() => { haveNatural(player, betPlayer, "playerBet"); }, 4000);
-
-    
-
 
     //assign onclick event to the Hit button
     document.getElementById('dealButton').onclick = function () {
@@ -329,24 +325,25 @@ function driverBlackjack() {
         //blackjackAI(deck, hand3, "p2Hand", false);
     }
 
+
     //assign onclick to Stand button
     document.getElementById('standButton').onclick = function () {
         blackjackAI(deck, hand2, "p3Hand");
         blackjackAI(deck, hand3, "p2Hand");
         dealerAI(deck, hand1);
 
-        if (isBustP4) {
-            switch (false) {
-                case isBustPlayer:
-                    document.getElementById("actionText").innerHTML += "<br />" + "Player (You) now has $" + 2 * betPlayer + ".";
-                    modifyBet("playerBet", 2 * betPlayer);
-                case isBustP2:
-                    document.getElementById("actionText").innerHTML += "<br />" + "Player 2 now has $" + 2 * betP2 + ".";
-                    modifyBet("p2Bet", 2 * betP2);
-                case isBustP3:
-                    document.getElementById("actionText").innerHTML += "<br />" + "Player 3 now has $" + 2 * betP3 + ".";
-                    modifyBet("p3Bet", 2 * betP3);
-                default: break;
+        if (isBustP4) { //if dealer busts, all players receive double their bet
+            if (!isBustPlayer) {
+                document.getElementById("actionText").innerHTML += "<br />" + "Player (You) doubled their cash!";
+                document.getElementById("playerBet").innerHTML *= 2;
+            }
+            if (!isBustP2) {
+                document.getElementById("actionText").innerHTML += "<br />" + "Player 2 doubled their cash!";
+                document.getElementById("p2Bet").innerHTML *= 2;
+            }
+            if (!isBustP3) {
+                document.getElementById("actionText").innerHTML += "<br />" + "Player 3 doubled their cash!";
+                document.getElementById("p3Bet").innerHTML *= 2;
             }
         }
 
