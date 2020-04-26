@@ -220,7 +220,7 @@ function dealerAI(deck, hand) {
     loadHandImages(hand, 'p4Hand', true);
 
     if (blackjackCalculateValue(hand) > 21) {
-        changeBust("p4", true);
+        isBustP4 = true;
         document.getElementById("actionText").innerHTML += '<br />' + "The dealer busted!";
         return;
     }
@@ -331,6 +331,9 @@ function driverBlackjack() {
         blackjackAI(deck, hand2, "p3Hand");
         blackjackAI(deck, hand3, "p2Hand");
         dealerAI(deck, hand1);
+
+        console.log(isBustP2); 
+        console.log(isBustP3);
 
         if (isBustP4) { //if dealer busts, all players receive double their bet
             if (!isBustPlayer) {
