@@ -204,7 +204,7 @@ function blackjackAI(deck, hand, id) {
 
     if (chance(probability)) deal(deck, hand, id, true);
     else {
-        //TODO: call "stand" function
+        document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " stands.";
     }
 }
 
@@ -288,13 +288,10 @@ function driverBlackjack() {
     document.getElementById("playerBet").innerHTML = betPlayer;
 
     //create hands for the players
-    //var hand1 = dealHand(deck, 2);
-    var hand1 = [[10, "D"], [10, "C"], [2, "C"]];
+    var hand1 = dealHand(deck, 2);
     var hand2 = dealHand(deck, 2);
     var hand3 = dealHand(deck, 2);
-    
-    //var player = dealHand(deck, 2);
-    var player = [[10, "D"], ['A', "C"]];
+    var player = dealHand(deck, 2);
 
     
     //show images as they are being dealed, left to right from dealer view
@@ -328,12 +325,12 @@ function driverBlackjack() {
 
     //assign onclick to Stand button
     document.getElementById('standButton').onclick = function () {
+        document.getElementById("actionText").innerHTML += "<br />" + "Player (You) stands.";
+
+
         blackjackAI(deck, hand2, "p3Hand");
         blackjackAI(deck, hand3, "p2Hand");
         dealerAI(deck, hand1);
-
-        console.log(isBustP2); 
-        console.log(isBustP3);
 
         if (isBustP4) { //if dealer busts, all players receive double their bet
             if (!isBustPlayer) {
