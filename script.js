@@ -300,7 +300,7 @@ function driverBlackjack() {
     setTimeout(() => { haveNatural(player, betPlayer, "playerBet"); }, 4000);
 
     //assign onclick event to the Hit button
-    document.getElementById('dealButton').onclick = function () {
+    document.getElementById('hitButton').onclick = function () {
         //case when split is available
         if (isSplit && !isBustPlayer) deal(deck, player[1], 'playerHandSplit', true);
         else if (isSplit && isBustPlayer) deal(deck, player[0], 'playerHand', true);
@@ -363,6 +363,10 @@ function driverBlackjack() {
                 document.getElementById("playerTotal").innerHTML -= Number(document.getElementById("playerBet").innerHTML);
             }
         }
+
+        document.getElementById('hitButton').disabled = true;
+        document.getElementById('standButton').disabled = true;
+
     }
 
     //assign onclick event to the Split button

@@ -32,8 +32,8 @@
     color:white;
 }
 
-#player1Area{
-
+#player1Area, #player2Area, #player3Area {
+    font-weight: bold;
 }
 
 #actionText {
@@ -58,7 +58,7 @@
     background-color: white;
 }
 
-#dealButton, #standButton, #doubleButton, #splitButton{
+#hitButton, #standButton, #doubleButton, #splitButton{
     width:125px;
     height:50px;
     background-color: white;
