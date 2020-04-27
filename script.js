@@ -79,7 +79,7 @@ function deal(deck, hand, id, show) {
 //face up or not
 function loadImage(hand, index, id, show) {
     var imageElement = new Image(90, 115); 
-    var imageLocation = "/CodingProjects/Web/Cards/resources/CardImages/";
+    var imageLocation = "resources/CardImages/";
     //change string depending on if the current card should be shown or not
     imageLocation += show ? hand[index][0].toString() + hand[index][1] + ".png" : "back.png"; 
     imageElement.src = imageLocation;
