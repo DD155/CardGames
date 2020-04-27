@@ -20,6 +20,7 @@
     left: 50px;
     bottom: 150px;
     width: 400px;
+    color:white;
 }
 
 #player3Area {
@@ -28,8 +29,12 @@
     position:absolute;
     right: 50px;
     bottom: 150px;
+    color:white;
 }
 
+#player1Area{
+
+}
 
 #actionText {
     color: white;

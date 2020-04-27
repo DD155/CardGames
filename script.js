@@ -103,10 +103,6 @@ function removeHandImgs(id) {
     }
 }
 
-function modifyBet(id, amount) {
-    document.getElementById(id).innerHTML = amount;
-}
-
 //Postcondition: keep scrollbar on the bottom
 function updateScroll() {
     document.getElementById('gameActions').scrollTop = document.getElementById('gameActions').scrollHeight;
@@ -277,7 +273,7 @@ function driverBlackjack() {
     betPlayer = betP2 = betP3 = 50;
     betDealer = 0;
 
-    document.getElementById("p4Bet").innerHTML = betDealer;
+    document.getElementById("p4Total").innerHTML = betDealer;
     document.getElementById("p3Bet").innerHTML = betP3;
     document.getElementById("p2Bet").innerHTML = betP2;
     document.getElementById("playerBet").innerHTML = betPlayer;
@@ -330,38 +326,41 @@ function driverBlackjack() {
         if (isBustP4) { //if dealer busts, all players receive double their bet
             if (!isBustPlayer) {
                 text.innerHTML += "<br />" + "Player (You) doubled their cash!";
-                document.getElementById("playerBet").innerHTML *= 2;
+                document.getElementById("playerTotal").innerHTML = Number(document.getElementById("playerBet").innerHTML) * 2;
             }
             if (!isBustP2) {
                 text.innerHTML += "<br />" + "Player 2 doubled their cash!";
-                document.getElementById("p2Bet").innerHTML *= 2;
+                document.getElementById("p2Total").innerHTML = Number(document.getElementById("p2Bet").innerHTML) * 2;
             }
             if (!isBustP3) {
                 text.innerHTML += "<br />" + "Player 3 doubled their cash!";
-                document.getElementById("p3Bet").innerHTML *= 2;
+                document.getElementById("p3Total").innerHTML = Number(document.getElementById("p3Bet").innerHTML) * 2;
             }
         } else { //calculate the results and pay the dealer/player accordingly
-            var dealerBet = document.getElementById("p4Bet");
+            var dealerBet = document.getElementById("p4Total");
             if (blackjackCalculateValue(hand1) < blackjackCalculateValue(hand2) && !isBustP3) {
                 text.innerHTML += '<br />' + "Dealer pays Player 3 double their bet.";
-                document.getElementById("p3Bet").innerHTML *= 2;               
+                document.getElementById("p3Total").innerHTML = Number(document.getElementById("p3Bet").innerHTML) * 2;              
             } else {
                 text.innerHTML += '<br />' + "Dealer takes Player 3's money.";
                 dealerBet.innerHTML = Number(dealerBet.innerHTML) + Number(document.getElementById("p3Bet").innerHTML);
+                document.getElementById("p3Total").innerHTML -= Number(document.getElementById("p3Bet").innerHTML);
             }
             if (blackjackCalculateValue(hand1) < blackjackCalculateValue(hand3) && !isBustP2) {
                 text.innerHTML += '<br />' + "Dealer pays Player 2 double their bet.";
-                document.getElementById("p2Bet").innerHTML *= 2;
+                document.getElementById("p2Total").innerHTML = Number(document.getElementById("p2Bet").innerHTML) * 2;
             } else {
                 text.innerHTML += '<br />' + "Dealer takes Player 2's money.";
                 dealerBet.innerHTML = Number(dealerBet.innerHTML) + Number(document.getElementById("p2Bet").innerHTML);
+                document.getElementById("p2Total").innerHTML -= Number(document.getElementById("p2Bet").innerHTML);
             }
             if (blackjackCalculateValue(hand1) < blackjackCalculateValue(player) && !isBustPlayer) {
                 text.innerHTML += '<br />' + "Dealer pays Player 1 (You) double their bet.";
-                document.getElementById("playerBet").innerHTML *= 2;   
+                document.getElementById("playerTotal").innerHTML = Number(document.getElementById("playerBet").innerHTML) * 2; 
             } else {
                 text.innerHTML += '<br />' + "Dealer takes Player's (You) money.";
                 dealerBet.innerHTML = Number(dealerBet.innerHTML) + Number(document.getElementById("playerBet").innerHTML);
+                document.getElementById("playerTotal").innerHTML -= Number(document.getElementById("playerBet").innerHTML);
             }
         }
     }
