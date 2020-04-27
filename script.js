@@ -60,7 +60,7 @@ function deal(deck, hand, id, show) {
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " hit.";
         if (blackjackCalculateValue(hand) > 21) { // player busts
             document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " busted!";
-            //changeBust(id, true);
+            changeBust(id, true);
             setTimeout(() => { removeHandImgs(id); }, 1000);
         }
     }
@@ -135,18 +135,13 @@ function generateNameString(id) {
 }
 
 function changeBust(id, isBust) {
-    switch (id[1]) {
-        case "l":
-            isBustPlayer = isBust;
-        case "4":
-            isBustP4 = isBust;
-        case "3":
-            isBustP3 = isBust;
-        case "2":
-            isBustP2 = isBust;
-        default:
-            break;
-    }
+    if (id[1] == 'l')
+        isBustPlayer = isBust;
+    else if (id[1] == '4')
+        isBustP4 = isBust;
+    else if (id[1] == '3')
+        isBustP3 = isBust;
+    else isBustP2 = isBust;
 }
 
 /*
@@ -289,11 +284,11 @@ function driverBlackjack() {
 
     //create hands for the players
     var hand1 = dealHand(deck, 2);
+    //var hand1 = [['K', 'C'], ['Q', 'C'], [3, "S"]];
     var hand2 = dealHand(deck, 2);
     var hand3 = dealHand(deck, 2);
     var player = dealHand(deck, 2);
 
-    
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(hand1, 0, "p4Hand", true); }, 1500);
     setTimeout(() => { loadHandImages(hand2, "p3Hand", true); }, 2000);
@@ -327,11 +322,10 @@ function driverBlackjack() {
     document.getElementById('standButton').onclick = function () {
         document.getElementById("actionText").innerHTML += "<br />" + "Player (You) stands.";
 
-
         blackjackAI(deck, hand2, "p3Hand");
         blackjackAI(deck, hand3, "p2Hand");
-        dealerAI(deck, hand1);
 
+        dealerAI(deck, hand1);
         if (isBustP4) { //if dealer busts, all players receive double their bet
             if (!isBustPlayer) {
                 document.getElementById("actionText").innerHTML += "<br />" + "Player (You) doubled their cash!";
@@ -345,6 +339,13 @@ function driverBlackjack() {
                 document.getElementById("actionText").innerHTML += "<br />" + "Player 3 doubled their cash!";
                 document.getElementById("p3Bet").innerHTML *= 2;
             }
+        } else {
+            if (blackjackCalculateValue(hand1) > blackjackCalculateValue(hand2))
+                document.getElementById("p4Bet").innerHTML += Number(document.getElementById("p2Bet").innerHTML);
+            if (blackjackCalculateValue(hand1) > blackjackCalculateValue(hand3))
+                document.getElementById("p4Bet").innerHTML += Number(document.getElementById("p3Bet").innerHTML);
+            if (blackjackCalculateValue(hand1) > blackjackCalculateValue(player))
+                document.getElementById("p4Bet").innerHTML += Number(document.getElementById("playerBet").innerHTML;
         }
 
     }
