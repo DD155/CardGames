@@ -213,7 +213,7 @@ function dealerAI(deck, hand) {
     //show hand
     removeHandImgs("p4Hand"); 
     loadHandImages(hand, 'p4Hand', true);
-
+    document.getElementById("actionText").innerHTML += '<br />' + "The dealer reveals their hand.";
     if (blackjackCalculateValue(hand) > 21) {
         isBustP4 = true;
         document.getElementById("actionText").innerHTML += '<br />' + "The dealer busted!";
@@ -340,22 +340,30 @@ function driverBlackjack() {
                 text.innerHTML += "<br />" + "Player 3 doubled their cash!";
                 document.getElementById("p3Bet").innerHTML *= 2;
             }
-        } else {
+        } else { //calculate the results and pay the dealer/player accordingly
             var dealerBet = document.getElementById("p4Bet");
-            if (blackjackCalculateValue(hand1) > blackjackCalculateValue(hand2)) {
+            if (blackjackCalculateValue(hand1) < blackjackCalculateValue(hand2) && !isBustP3) {
+                text.innerHTML += '<br />' + "Dealer pays Player 3 double their bet.";
+                document.getElementById("p3Bet").innerHTML *= 2;               
+            } else {
                 text.innerHTML += '<br />' + "Dealer takes Player 3's money.";
                 dealerBet.innerHTML = Number(dealerBet.innerHTML) + Number(document.getElementById("p3Bet").innerHTML);
             }
-            if (blackjackCalculateValue(hand1) > blackjackCalculateValue(hand3)) {
+            if (blackjackCalculateValue(hand1) < blackjackCalculateValue(hand3) && !isBustP2) {
+                text.innerHTML += '<br />' + "Dealer pays Player 2 double their bet.";
+                document.getElementById("p2Bet").innerHTML *= 2;
+            } else {
                 text.innerHTML += '<br />' + "Dealer takes Player 2's money.";
                 dealerBet.innerHTML = Number(dealerBet.innerHTML) + Number(document.getElementById("p2Bet").innerHTML);
             }
-            if (blackjackCalculateValue(hand1) > blackjackCalculateValue(player)) {
+            if (blackjackCalculateValue(hand1) < blackjackCalculateValue(player) && !isBustPlayer) {
+                text.innerHTML += '<br />' + "Dealer pays Player 1 (You) double their bet.";
+                document.getElementById("playerBet").innerHTML *= 2;   
+            } else {
                 text.innerHTML += '<br />' + "Dealer takes Player's (You) money.";
                 dealerBet.innerHTML = Number(dealerBet.innerHTML) + Number(document.getElementById("playerBet").innerHTML);
             }
         }
-
     }
 
     //assign onclick event to the Split button
@@ -368,7 +376,7 @@ function driverBlackjack() {
     document.getElementById('splitButton').disabled = true;
 
     // check if eligible to split
-    checkSplit(player, true);    
+    checkSplit(player, true);
 
 
 }
