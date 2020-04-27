@@ -306,11 +306,13 @@ function driverBlackjack() {
         else if (isSplit && isBustPlayer) deal(deck, player[0], 'playerHand', true);
         else deal(deck, player, 'playerHand', true);
 
-        checkSplit(player, true);    
+        if (isBustPlayer) {
+            document.getElementById('hitButton').disabled = true;
+            document.getElementById('standButton').disabled = true;
 
-        //blackjackAI(deck, hand1, "p4Hand", true);
-        //blackjackAI(deck, hand2, "p3Hand", false);
-        //blackjackAI(deck, hand3, "p2Hand", false);
+
+        } else 
+        checkSplit(player, true);    
     }
 
 
