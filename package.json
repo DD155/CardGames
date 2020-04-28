@@ -1,0 +1,22 @@
+{
+  "name": "card-game-website",
+  "version": "1.0.0",
+  "description": "A collection of different classic playing card games built with HTML, JS, CSS.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DD155/card-game-website.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DD155/card-game-website/issues"
+  },
+  "homepage": "https://github.com/DD155/card-game-website#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
