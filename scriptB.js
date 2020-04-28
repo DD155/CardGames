@@ -67,6 +67,29 @@ function deal(deck, hand, id, show) {
 
     updateScroll();
 }
+/*
+######################################################################################################################
+                                                    CLASSES
+######################################################################################################################
+*/
+
+class Player {
+    constructor(health, attack, blackJackHand) {
+        this.health = health;
+        this.attack = attack;
+        this.bust = false;
+        this.blackJackHand = blackJackHand;
+    }
+
+    set Health(value) {
+        this.health = value;
+    }
+
+    set Bust(value) {
+        this.bust = value;
+	}
+}
+
 
 
 /* 
@@ -114,31 +137,6 @@ function chance(probability) {
     return false;
 }
 
-//Postcondition: return a string from the corresponding id
-function generateNameString(id) {
-    switch (id[1]) {
-        case "l":
-            return "Player 1 (You)";
-        case "4":
-            return "Dealer";
-        case "3":
-            return "Player 3";
-        case "2":
-            return "Player 2";
-        default:
-            break;
-    }
-}
-
-function changeBust(id, isBust) {
-    if (id[1] == 'l')
-        isBustPlayer = isBust;
-    else if (id[1] == '4')
-        isBustP4 = isBust;
-    else if (id[1] == '3')
-        isBustP3 = isBust;
-    else isBustP2 = isBust;
-}
 
 /*
 ######################################################################################################################
@@ -272,11 +270,13 @@ function driverBlackjack() {
     //create hands for the players
     var hand1 = dealHand(deck, 2);
     //var hand1 = [['K', 'C'], ['Q', 'C'], [3, "S"]];
-    var player = dealHand(deck, 2);
+    var player = new Player(30, 5, dealHand(deck, 2));
+
+    console.log(player.health);
 
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(hand1, 0, "enemyHand", true); }, 1500);
-    setTimeout(() => { loadHandImages(player, "playerHandBJ", true); }, 2500);
+    setTimeout(() => { loadHandImages(player.blackJackHand, "playerHandBJ", true); }, 2500);
     //dealer has card face down
     setTimeout(() => { loadImage(hand1, 1, "enemyHand", false); }, 3500);
     setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3500);
@@ -285,9 +285,9 @@ function driverBlackjack() {
     //assign onclick event to the Hit button
     document.getElementById('hitButton').onclick = function () {
         //case when split is available
-        if (isSplit && !isBustPlayer) deal(deck, player[1], 'playerHandSplit', true);
-        else if (isSplit && isBustPlayer) deal(deck, player[0], 'playerHandBJ', true);
-        else deal(deck, player, 'playerHandBJ', true);
+        if (isSplit && !isBustPlayer) deal(deck, player.blackJackHand[1], 'playerHandSplit', true);
+        else if (isSplit && isBustPlayer) deal(deck, player.blackJackHand[0], 'playerHandBJ', true);
+        else deal(deck, player.blackJackHand, 'playerHandBJ', true);
 
         if (isBustPlayer) {
             document.getElementById('hitButton').disabled = true;
@@ -295,7 +295,7 @@ function driverBlackjack() {
 
 
         } else
-            checkSplit(player, true);
+            checkSplit(player.blackJackHand, true);
     }
 
 
@@ -313,7 +313,7 @@ function driverBlackjack() {
 
     //assign onclick event to the Split button
     document.getElementById('splitButton').onclick = function () {
-        player = split(player, 'playerHandBJ');
+        player.blackJackHand = split(player.blackJackHand, 'playerHandBJ');
         isSplit = true;
     }
 
@@ -321,7 +321,7 @@ function driverBlackjack() {
     document.getElementById('splitButton').disabled = true;
 
     // check if eligible to split
-    checkSplit(player, true);
+    checkSplit(player.blackJackHand, true);
 
 
 }
