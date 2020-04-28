@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+<!-- <script src="/CodingProjects/Web/CardGames/script.js"></script> -->
+
+<script src="scriptB.js"></script>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>BlackJack</title>
+</head>
+<body onload="driverBlackjack();">
+    <button id="backButton" onclick="location.href='CardsHomePage.html'">Back</button>
+    <h1 style="text-align:center">Blackjack</h1>
+    <div id="gameArea">
+        <div id="gameActions">
+            <b id="actionText">Welcome to the game! Currently dealing...</b>
+        </div>
+        <div id="enemyArea">
+            <br /> <b style="color:white">Dealer <br /> Total: $</b>
+            <b id="enemyTotal" style="color:white">0 </b>
+            <p id="enemyHand"></p>
+            <br /> <br /> <br />
+        </div>
+        <div>
+            <button id="hitButton"> Hit </button>
+            <button id="standButton"> Stand </button> <br />
+            <button id="splitButton"> Split </button>
+            <button id="doubleButton" disabled> Double Down </button>
+
+        </div>
+        
+        <br /> <br /> <br />
+        <div style="color:white" id="player1Area">
+            <b style="color: white">Player (You) <br /> Total Cash: $</b>
+            <b id="playerHP">100</b><br />
+            <p id="playerHandBJ"></p>
+            <p id="playerHandSplit"></p>
+            <p id="playerHand"></p>
+        </div>
+        <img id="deckImg" src="resources/CardImages/back.png" />
+    </div>
+</body>
+</html>
