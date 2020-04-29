@@ -78,7 +78,9 @@ class Player {
         this.health = health;
         this.attack = attack;
         this.bust = false;
+        this.split = false;
         this.blackJackHand = blackJackHand;
+        this.hand = [];
     }
 
     set Health(value) {
@@ -87,7 +89,9 @@ class Player {
 
     set Bust(value) {
         this.bust = value;
-	}
+    }
+
+
 }
 
 
@@ -285,8 +289,8 @@ function driverBlackjack() {
     //assign onclick event to the Hit button
     document.getElementById('hitButton').onclick = function () {
         //case when split is available
-        if (isSplit && !isBustPlayer) deal(deck, player.blackJackHand[1], 'playerHandSplit', true);
-        else if (isSplit && isBustPlayer) deal(deck, player.blackJackHand[0], 'playerHandBJ', true);
+        if (isSplit && !player.bust) deal(deck, player.blackJackHand[1], 'playerHandSplit', true);
+        else if (isSplit && player.bust) deal(deck, player.blackJackHand[0], 'playerHandBJ', true);
         else deal(deck, player.blackJackHand, 'playerHandBJ', true);
 
         if (isBustPlayer) {
@@ -322,6 +326,10 @@ function driverBlackjack() {
 
     // check if eligible to split
     checkSplit(player.blackJackHand, true);
+
+
+
+
 
 
 }

@@ -1,6 +1,6 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="styleB.css">
 <!-- <script src="/CodingProjects/Web/CardGames/script.js"></script> -->
 
 <script src="scriptB.js"></script>
@@ -12,14 +12,13 @@
 </head>
 <body onload="driverBlackjack();">
     <button id="backButton" onclick="location.href='CardsHomePage.html'">Back</button>
-    <h1 style="text-align:center">Blackjack</h1>
     <div id="gameArea">
         <div id="gameActions">
             <b id="actionText">Welcome to the game! Currently dealing...</b>
         </div>
         <div id="enemyArea">
-            <br /> <b style="color:white">Dealer <br /> Total: $</b>
-            <b id="enemyTotal" style="color:white">0 </b>
+            <br /> <b style="color:white">Dealer <br /> Health: </b>
+            <b id="enemyHP" style="color:white">50</b>
             <p id="enemyHand"></p>
             <br /> <br /> <br />
         </div>
@@ -33,8 +32,8 @@
         
         <br /> <br /> <br />
         <div style="color:white" id="player1Area">
-            <b style="color: white">Player (You) <br /> Total Cash: $</b>
-            <b id="playerHP">100</b><br />
+            <b style="color: white">Player (You) <br /> Health:</b>
+            <b id="playerHP">30</b><br />
             <p id="playerHandBJ"></p>
             <p id="playerHandSplit"></p>
             <p id="playerHand"></p>

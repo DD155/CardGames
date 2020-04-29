@@ -1,0 +1,98 @@
+#divMain {
+    text-align: center;
+}
+
+#buttonList {
+    /*text-align: center;*/
+    list-style-type: none;
+}
+
+#gameArea {
+    text-align: center;
+    border: 3px solid black;
+    height: 700px;
+    background-color: green;
+}
+
+#player2Area {
+    /*float:left;*/
+    position: absolute;
+    left: 50px;
+    bottom: 150px;
+    width: 400px;
+    color: white;
+}
+
+#player3Area {
+    /*float: right;*/
+    width: 400px;
+    position: absolute;
+    right: 50px;
+    bottom: 150px;
+    color: white;
+}
+
+#player1Area, #player2Area, #player3Area {
+    font-weight: bold;
+}
+
+#actionText {
+    color: white;
+}
+
+#playerHandSplit {
+}
+
+#deckImg {
+    position: absolute;
+    right: 100px;
+    top: 100px;
+    width: 100px;
+    height: 125px;
+    display: inline-block;
+    border: 3px groove;
+    border-radius: 7px;
+    padding: 5px 5px;
+    margin: 0px 5px;
+    background-color: white;
+}
+
+#hitButton, #standButton, #doubleButton, #splitButton {
+    width: 125px;
+    height: 50px;
+    background-color: white;
+}
+
+#gameActions {
+    text-align: left;
+    position: absolute;
+    overflow: auto;
+    height: 150px;
+    width: 400px;
+}
+
+#backButton {
+    position:absolute;
+    left: 1475px;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+}
+
+.buttonAction {
+    width: 250px;
+    height: 100px;
+}
+
+.buttonListItem {
+    margin: 40px 0;
+}
+
+.cardImages {
+    display: inline-block;
+    border: 3px groove;
+    border-radius: 7px;
+    padding: 5px 5px;
+    margin: 0px 5px;
+    background-color: white;
+}
