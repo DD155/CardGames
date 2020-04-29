@@ -14,25 +14,7 @@
     background-color: green;
 }
 
-#player2Area {
-    /*float:left;*/
-    position: absolute;
-    left: 50px;
-    bottom: 150px;
-    width: 400px;
-    color: white;
-}
-
-#player3Area {
-    /*float: right;*/
-    width: 400px;
-    position: absolute;
-    right: 50px;
-    bottom: 150px;
-    color: white;
-}
-
-#player1Area, #player2Area, #player3Area {
+#player1Area {
     font-weight: bold;
 }
 
@@ -41,6 +23,7 @@
 }
 
 #playerHandSplit {
+
 }
 
 #deckImg {

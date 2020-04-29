@@ -51,16 +51,25 @@ function dealHand(deck, amount) {
 
 //Precondition: deck is not empty
 //Postcondition: adds one card to the hand array
-function deal(deck, hand, id, show) {
+function deal(deck, playerObj, isPlayer, show) {
     if (deck.length < 1) return;
 
-    if (blackjackCalculateValue(hand) < 21) { //check if you can get another card
-        hand.push(deck.pop());
-        loadImage(hand, hand.length - 1, id, show);
-        document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " hit.";
-        if (blackjackCalculateValue(hand) > 21) { // player busts
-            document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " busted!";
-            changeBust(id, true);
+    if (isPlayer) {
+        var s = "Player";
+        var id = "playerHandBJ";
+    }
+    else {
+        var s = "Enemy";
+        var id = "enemyHand";
+    }
+
+    if (playerObj.blackjackCalculateValue() < 21) { //check if you can get another card
+        playerObj.blackJackHand.push(deck.pop());
+        loadImage(playerObj.blackJackHand, playerObj.blackJackHand.length - 1, id, show);
+        document.getElementById("actionText").innerHTML += "<br />" + s + " hit.";
+        if (playerObj.blackjackCalculateValue() > 21) { // player busts
+            document.getElementById("actionText").innerHTML += "<br />" + s + " busted!";
+            playerObj.Bust(true);
             setTimeout(() => { removeHandImgs(id); }, 2000);
         }
     }
@@ -91,7 +100,27 @@ class Player {
         this.bust = value;
     }
 
+    blackjackCalculateValue() {
+        if (this.blackJackHand.length < 1) return; //precondition
+        var sum = 0;
+        var aces = 0;
 
+        for (var i = 0; i < this.blackJackHand.length; i++) { //go through array to sum up values
+            //face cards are worth 10 points
+            if (this.blackJackHand[i][0] == 'J' || this.blackJackHand[i][0] == 'Q' || this.blackJackHand[i][0] == 'K') 
+                sum += 10;
+            else if (this.blackJackHand[i][0] == 'A') {//count ace as 11 for now
+                sum += 11; aces++;
+            } else sum += this.blackJackHand[i][0];
+        }
+
+        while (sum > 21 && aces > 0) { //if the sum has exceeded 21 due to aces, count them as 1 now.
+            sum -= 10;
+            aces--;
+        }
+
+        return sum;
+    }
 }
 
 
@@ -170,7 +199,7 @@ function blackjackCalculateValue(hand) {
     return sum;
 }
 
-
+/*
 // Precondition: deck is not empty, hand is not empty
 // Postcondition: the AI has chosen to either hit or stay
 // algorithm will be as follows:
@@ -200,7 +229,7 @@ function blackjackAI(deck, hand, id) {
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " stands.";
     }
 }
-
+*
 //1. When the dealer has served every player, the dealers face-down card is turned up.
 //2. If the total is 17 or more, it must stand. If the total is 16 or under, they must take a card.
 //3. The dealer must continue to take cards until the total is 17 or more, at which point the dealer must stand.
@@ -222,13 +251,14 @@ function dealerAI(deck, hand) {
     if (blackjackCalculateValue(hand) >= 17) return; //dealer MUST stand if total is 17 or higher
     else {
         while (blackjackCalculateValue(hand) < 17) {
-            deal(deck, hand, "enemyHand", true);
+            deal(deck, hand, false, true);
         }
     }
 
 
 }
 
+*/
 //Precondition: check if the hand has 2 cards and if they are the same rank
 function checkSplit(hand, isPlayer) {
     if (hand.length == 2 && hand[0][0] == hand[1][0]) {
@@ -239,6 +269,7 @@ function checkSplit(hand, isPlayer) {
     return false;
 }
 
+/*
 function haveNatural(hand, bet, id) {
     if (blackjackCalculateValue(hand) == 21) {
         document.getElementById("actionText").innerHTML += "<br />" + generateNameString(id) + " has a natural!";
@@ -246,7 +277,7 @@ function haveNatural(hand, bet, id) {
         document.getElementById(id).innerHTML = bet * 1.5;
     }
 }
-
+*/
 function split(hand, id) {
     var newHand = [[hand[0]], [hand[1]]]
 
@@ -289,9 +320,11 @@ function driverBlackjack() {
     //assign onclick event to the Hit button
     document.getElementById('hitButton').onclick = function () {
         //case when split is available
-        if (isSplit && !player.bust) deal(deck, player.blackJackHand[1], 'playerHandSplit', true);
-        else if (isSplit && player.bust) deal(deck, player.blackJackHand[0], 'playerHandBJ', true);
-        else deal(deck, player.blackJackHand, 'playerHandBJ', true);
+        //if (isSplit && !player.bust) deal(deck, player, 'playerHandSplit', true);
+        //else if (isSplit && player.bust) deal(deck, player, 'playerHandBJ', true);
+        //else deal(deck, player, true, true);
+
+        deal(deck, player, true, true);
 
         if (isBustPlayer) {
             document.getElementById('hitButton').disabled = true;
@@ -308,7 +341,7 @@ function driverBlackjack() {
         var text = document.getElementById("actionText");
         text.innerHTML += "<br />" + "Player (You) stands.";
 
-        dealerAI(deck, hand1);
+        //dealerAI(deck, hand1);
         
         document.getElementById('hitButton').disabled = true;
         document.getElementById('standButton').disabled = true;
