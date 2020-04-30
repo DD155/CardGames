@@ -100,7 +100,7 @@ class Player {
         this.bust = value;
     }
 
-    blackjackCalculateValue() {
+    points() {
         if (this.blackJackHand.length < 1) return; //precondition
         var sum = 0;
         var aces = 0;
