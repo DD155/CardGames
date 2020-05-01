@@ -43,24 +43,6 @@ function dealHand(deck, amount) {
     return arr;
 }
 
-//Precondition: deck is not empty
-//Postcondition: adds one card to the hand array
-function deal(deck, playerObj, show) {
-    if (deck.length < 1) return;
-
-    if (playerObj.points() < 21) { //check if you can get another card
-        playerObj.blackJackHand.push(deck.pop());
-        loadImage(playerObj.blackJackHand, playerObj.blackJackHand.length - 1, 'playerHandBJ', show);
-        document.getElementById("actionText").innerHTML += "<br />" + "You hit.";
-        if (playerObj.points() > 21) { // player busts
-            document.getElementById("actionText").innerHTML += "<br />" + "You busted!";
-            playerObj.Bust(true);
-            setTimeout(() => { removeHandImgs('playerHandBJ'); }, 2000);
-        }
-    }
-
-    updateScroll();
-}
 /*
 ######################################################################################################################
                                                     CLASSES
@@ -135,12 +117,12 @@ class Enemy extends Player {
 
     //Precondition: Change bust value to true and take damage from busting.
     enemyBust() {
+        var dmg = (super.points() - 21);
         document.getElementById("actionText").innerHTML += '<br />' + this.name + " busted!";
         super.changeBust = true;
-        super.changeHealth = (this.health - (super.points() - 21)); //lose health based on how much they were from 21
+        super.changeHealth = (this.health - dmg); //lose health based on how much they were from 21
         document.getElementById("enemyHP").innerHTML = this.health;
-        document.getElementById("actionText").innerHTML += '<br />' + this.name + " took " + (super.points() - 21) + " damage.";
-
+        document.getElementById("actionText").innerHTML += '<br />' + this.name + " took " + dmg + " damage.";
     }
 
     enemyDeal(deck) { 
@@ -295,15 +277,12 @@ function driverBlackjack() {
 
     //create the player and the enemy
     var player = new Player(30, 5, "Player", dealHand(deck, 2));
-    var enemy = new Enemy(45, 5, "Skeleton", [['K','C'], ['J','C'], ['J','S']]);
-
-    //var enemy = new Enemy(45, 5, "Skeleton", dealHand(deck, 2));
+    var enemy = new Enemy(45, 5, "Skeleton", dealHand(deck, 2));
 
     //set text 
     document.getElementById('enemyHP').innerHTML = enemy.health;
     document.getElementById('enemyName').innerHTML = enemy.name;
     document.getElementById('playerName').innerHTML = player.name;
-
 
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(enemy.blackJackHand, 0, "enemyHand", true); }, 1500);
@@ -311,7 +290,6 @@ function driverBlackjack() {
     //dealer has card face down
     setTimeout(() => { loadImage(enemy.blackJackHand, 1, "enemyHand", false); }, 3500);
     setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3500);
-
 
     //assign onclick event to the Hit button
     document.getElementById('hitButton').onclick = function () {
@@ -329,7 +307,6 @@ function driverBlackjack() {
             checkSplit(player.blackJackHand, true);
     }
 
-
     //assign onclick to Stand button
     document.getElementById('standButton').onclick = function () {
         var text = document.getElementById("actionText");
@@ -339,7 +316,6 @@ function driverBlackjack() {
 
         document.getElementById('hitButton').disabled = true;
         document.getElementById('standButton').disabled = true;
-
     }
 
     //assign onclick event to the Split button
@@ -353,5 +329,4 @@ function driverBlackjack() {
 
     // check if eligible to split
     checkSplit(player.blackJackHand, true);
-
 }
