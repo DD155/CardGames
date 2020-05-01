@@ -68,10 +68,10 @@ function deal(deck, playerObj, show) {
 */
 
 class Player {
-    constructor(health, attack, name, blackJackHand) {
+    constructor(health, atk, name, blackJackHand) {
         this.name = name;
         this.health = health;
-        this.attack = attack;
+        this.atk = atk;
         this.bust = false;
         this.split = false;
         this.blackJackHand = blackJackHand;
@@ -86,6 +86,8 @@ class Player {
         this.bust = value;
     }
 
+    //Precondition: Hand must not be empty
+    //Postcondition: Returns the amount of points the current hand is worth
     points() {
         if (this.blackJackHand.length < 1) return; //precondition
         var sum = 0;
@@ -118,7 +120,7 @@ class Player {
             if (this.points() > 21) { // player busts
                 document.getElementById("actionText").innerHTML += "<br />" + this.name + " busted!";
                 this.changeBust = true;
-                setTimeout(() => { removeHandImgs('playerHandBJ'); }, 2000);
+                setTimeout(() => { removeHandImgs(id); }, 2000);
             }
         }
 
@@ -127,28 +129,46 @@ class Player {
 }
 
 class Enemy extends Player {
-    constructor(health, attack, name, blackJackHand) {
-        super(health, attack, name, blackJackHand);
+    constructor(health, atk, name, blackJackHand) {
+        super(health, atk, name, blackJackHand);
     }
 
-    enemyDeal(deck) {
-        removeHandImgs("enemyHand");
+    //Precondition: Change bust value to true and take damage from busting.
+    enemyBust() {
+        document.getElementById("actionText").innerHTML += '<br />' + this.name + " busted!";
+        super.changeBust = true;
+        super.changeHealth = (this.health - (super.points() - 21)); //lose health based on how much they were from 21
+        document.getElementById("enemyHP").innerHTML = this.health;
+        document.getElementById("actionText").innerHTML += '<br />' + this.name + " took " + (super.points() - 21) + " damage.";
+
+    }
+
+    enemyDeal(deck) { 
+        //reveal the hand
+        removeHandImgs("enemyHand"); 
         loadHandImages(this.blackJackHand, 'enemyHand', true);
-        document.getElementById("actionText").innerHTML += '<br />' + "The dealer reveals their hand.";
-        if (super.points() > 21) {
-            super.changeBust = true;
-            document.getElementById("actionText").innerHTML += '<br />' + "The dealer busted!";
+        document.getElementById("actionText").innerHTML += '<br />' + this.name + " reveals their hand.";
+
+        if (super.points() > 21) { // logic for if the dealer busts
+            this.enemyBust();
             return;
         }
 
         //hit
         if (super.points() >= 17) return; //dealer MUST stand if total is 17 or higher
         else {
-            while (super.points() < 17) {
+            while (super.points() < 17) {//keep hitting until 17 or higher
                 super.deal(deck, 'enemyHand', true);
             }
+
+            //check again after dealing
+            if (super.points() > 21) { 
+                this.enemyBust();
+            }
         }
+        updateScroll();
     }
+
 }
 
 
@@ -275,7 +295,9 @@ function driverBlackjack() {
 
     //create the player and the enemy
     var player = new Player(30, 5, "Player", dealHand(deck, 2));
-    var enemy = new Enemy(45, 5, "Skeleton", dealHand(deck, 2));
+    var enemy = new Enemy(45, 5, "Skeleton", [['K','C'], ['J','C'], ['J','S']]);
+
+    //var enemy = new Enemy(45, 5, "Skeleton", dealHand(deck, 2));
 
     //set text 
     document.getElementById('enemyHP').innerHTML = enemy.health;
@@ -331,10 +353,5 @@ function driverBlackjack() {
 
     // check if eligible to split
     checkSplit(player.blackJackHand, true);
-
-
-
-
-
 
 }
