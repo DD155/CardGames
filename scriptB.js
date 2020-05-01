@@ -1,9 +1,3 @@
-var isSplit = false; //var for if player can split
-var isBustPlayer = false;
-var isBustP4 = false;
-var isBustP3 = false;
-var isBustP2 = false; //vars for when hands over 21
-
 /*
 ######################################################################################################################
                                                 DECK FUNCTIONS
@@ -51,26 +45,17 @@ function dealHand(deck, amount) {
 
 //Precondition: deck is not empty
 //Postcondition: adds one card to the hand array
-function deal(deck, playerObj, isPlayer, show) {
+function deal(deck, playerObj, show) {
     if (deck.length < 1) return;
-
-    if (isPlayer) {
-        var s = "Player";
-        var id = "playerHandBJ";
-    }
-    else {
-        var s = "Enemy";
-        var id = "enemyHand";
-    }
 
     if (playerObj.points() < 21) { //check if you can get another card
         playerObj.blackJackHand.push(deck.pop());
-        loadImage(playerObj.blackJackHand, playerObj.blackJackHand.length - 1, id, show);
-        document.getElementById("actionText").innerHTML += "<br />" + s + " hit.";
+        loadImage(playerObj.blackJackHand, playerObj.blackJackHand.length - 1, 'playerHandBJ', show);
+        document.getElementById("actionText").innerHTML += "<br />" + "You hit.";
         if (playerObj.points() > 21) { // player busts
-            document.getElementById("actionText").innerHTML += "<br />" + s + " busted!";
+            document.getElementById("actionText").innerHTML += "<br />" + "You busted!";
             playerObj.Bust(true);
-            setTimeout(() => { removeHandImgs(id); }, 2000);
+            setTimeout(() => { removeHandImgs('playerHandBJ'); }, 2000);
         }
     }
 
@@ -83,7 +68,8 @@ function deal(deck, playerObj, isPlayer, show) {
 */
 
 class Player {
-    constructor(health, attack, blackJackHand) {
+    constructor(health, attack, name, blackJackHand) {
+        this.name = name;
         this.health = health;
         this.attack = attack;
         this.bust = false;
@@ -92,11 +78,11 @@ class Player {
         this.hand = [];
     }
 
-    set Health(value) {
+    set changeHealth(value) {
         this.health = value;
     }
 
-    set Bust(value) {
+    set changeBust(value) {
         this.bust = value;
     }
 
@@ -121,19 +107,36 @@ class Player {
 
         return sum;
     }
+
+    deal(deck, id, show) {
+        if (deck.length < 1) return;
+
+        if (this.points() < 21) { //check if you can get another card
+            this.blackJackHand.push(deck.pop());
+            loadImage(this.blackJackHand, this.blackJackHand.length - 1, id, show);
+            document.getElementById("actionText").innerHTML += "<br />" + this.name + " hit.";
+            if (this.points() > 21) { // player busts
+                document.getElementById("actionText").innerHTML += "<br />" + this.name + " busted!";
+                this.changeBust = true;
+                setTimeout(() => { removeHandImgs('playerHandBJ'); }, 2000);
+            }
+        }
+
+        updateScroll();
+    }
 }
 
 class Enemy extends Player {
-    constructor(health, attack, blackJackHand) {
-        super(health, attack, blackJackHand);
+    constructor(health, attack, name, blackJackHand) {
+        super(health, attack, name, blackJackHand);
     }
 
-    deal(deck) {
+    enemyDeal(deck) {
         removeHandImgs("enemyHand");
-        loadHandImages(hand, 'enemyHand', true);
+        loadHandImages(this.blackJackHand, 'enemyHand', true);
         document.getElementById("actionText").innerHTML += '<br />' + "The dealer reveals their hand.";
         if (super.points() > 21) {
-            Bust(true);
+            super.changeBust = true;
             document.getElementById("actionText").innerHTML += '<br />' + "The dealer busted!";
             return;
         }
@@ -141,8 +144,8 @@ class Enemy extends Player {
         //hit
         if (super.points() >= 17) return; //dealer MUST stand if total is 17 or higher
         else {
-            while (this.points() < 17) {
-                deal(deck, hand, false, true);
+            while (super.points() < 17) {
+                super.deal(deck, 'enemyHand', true);
             }
         }
     }
@@ -270,13 +273,15 @@ function driverBlackjack() {
     var deck = createDeck();
     shuffle(deck);
 
+    //create the player and the enemy
+    var player = new Player(30, 5, "Player", dealHand(deck, 2));
+    var enemy = new Enemy(45, 5, "Skeleton", dealHand(deck, 2));
 
-    //create hands for the players
+    //set text 
+    document.getElementById('enemyHP').innerHTML = enemy.health;
+    document.getElementById('enemyName').innerHTML = enemy.name;
+    document.getElementById('playerName').innerHTML = player.name;
 
-    var player = new Player(30, 5, dealHand(deck, 2));
-    var enemy = new Enemy(50, 5, dealHand(deck, 2));
-
-    console.log(enemy.health);
 
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(enemy.blackJackHand, 0, "enemyHand", true); }, 1500);
@@ -293,13 +298,11 @@ function driverBlackjack() {
         //else if (isSplit && player.bust) deal(deck, player, 'playerHandBJ', true);
         //else deal(deck, player, true, true);
 
-        deal(deck, player, true, true);
+        player.deal(deck, 'playerHandBJ', true);
 
-        if (isBustPlayer) {
+        if (player.bust) {
             document.getElementById('hitButton').disabled = true;
             document.getElementById('standButton').disabled = true;
-
-
         } else
             checkSplit(player.blackJackHand, true);
     }
@@ -310,7 +313,8 @@ function driverBlackjack() {
         var text = document.getElementById("actionText");
         text.innerHTML += "<br />" + "Player (You) stands.";
 
-        
+        enemy.enemyDeal(deck);
+
         document.getElementById('hitButton').disabled = true;
         document.getElementById('standButton').disabled = true;
 

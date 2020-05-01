@@ -14,7 +14,7 @@
     background-color: green;
 }
 
-#player1Area {
+#playerArea, #enemyArea {
     font-weight: bold;
 }
 
