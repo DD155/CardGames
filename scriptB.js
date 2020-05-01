@@ -1,5 +1,116 @@
 /*
 ######################################################################################################################
+                                                    CLASSES
+######################################################################################################################
+*/
+
+class Player {
+    constructor(health, atk, name, blackJackHand) {
+        this.name = name;
+        this.health = health;
+        this.atk = atk;
+        this.bust = false;
+        this.split = false;
+        this.blackJackHand = blackJackHand;
+        this.hand = [];
+    }
+
+    set changeHealth(value) {
+        this.health = value;
+    }
+
+    set changeBust(value) {
+        this.bust = value;
+    }
+
+    //Precondition: Hand must not be empty
+    //Postcondition: Returns the amount of points the current hand is worth
+    points() {
+        if (this.blackJackHand.length < 1) return; //precondition
+        var sum = 0;
+        var aces = 0;
+
+        for (var i = 0; i < this.blackJackHand.length; i++) { //go through array to sum up values
+            //face cards are worth 10 points
+            if (this.blackJackHand[i][0] == 'J' || this.blackJackHand[i][0] == 'Q' || this.blackJackHand[i][0] == 'K')
+                sum += 10;
+            else if (this.blackJackHand[i][0] == 'A') {//count ace as 11 for now
+                sum += 11; aces++;
+            } else sum += this.blackJackHand[i][0];
+        }
+
+        while (sum > 21 && aces > 0) { //if the sum has exceeded 21 due to aces, count them as 1 now.
+            sum -= 10;
+            aces--;
+        }
+
+        return sum;
+    }
+
+    deal(deck, id, show) {
+        if (deck.length < 1) return;
+
+        if (this.points() < 21) { //check if you can get another card
+            this.blackJackHand.push(deck.pop());
+            loadImage(this.blackJackHand, this.blackJackHand.length - 1, id, show);
+            document.getElementById("actionText").innerHTML += "<br />" + this.name + " hit.";
+            if (this.points() > 21) { // player busts
+                document.getElementById("actionText").innerHTML += "<br />" + this.name + " busted!";
+                this.changeBust = true;
+                setTimeout(() => { removeHandImgs(id); }, 2000);
+            }
+        }
+
+        updateScroll();
+    }
+}
+
+class Enemy extends Player {
+    constructor(health, atk, name, blackJackHand) {
+        super(health, atk, name, blackJackHand);
+    }
+
+    //Precondition: Change bust value to true and take damage from busting.
+    enemyBust() {
+        var dmg = (super.points() - 21);
+        super.changeBust = true;
+        super.changeHealth = (this.health - dmg); //lose health based on how much they were from 21
+        document.getElementById("enemyHP").innerHTML = this.health;
+        document.getElementById("actionText").innerHTML += '<br />' + this.name + " took " + dmg + " damage.";
+    }
+
+    enemyDeal(deck) {
+        //reveal the hand
+        removeHandImgs("enemyHand");
+        loadHandImages(this.blackJackHand, 'enemyHand', true);
+        document.getElementById("actionText").innerHTML += '<br />' + this.name + " reveals their hand.";
+
+        if (super.points() > 21) { // logic for if the dealer busts
+            document.getElementById("actionText").innerHTML += '<br />' + this.name + " busted!";
+            this.enemyBust();
+            return;
+        }
+
+        //hit
+        if (super.points() >= 17) return; //dealer MUST stand if total is 17 or higher
+        else {
+            while (super.points() < 17) {//keep hitting until 17 or higher
+                super.deal(deck, 'enemyHand', true);
+            }
+
+            //check again after dealing
+            if (super.points() > 21) {
+                this.enemyBust();
+            }
+        }
+        updateScroll();
+    }
+
+}
+
+
+/*
+######################################################################################################################
                                                 DECK FUNCTIONS
 ######################################################################################################################
 */
@@ -42,117 +153,6 @@ function dealHand(deck, amount) {
     }
     return arr;
 }
-
-/*
-######################################################################################################################
-                                                    CLASSES
-######################################################################################################################
-*/
-
-class Player {
-    constructor(health, atk, name, blackJackHand) {
-        this.name = name;
-        this.health = health;
-        this.atk = atk;
-        this.bust = false;
-        this.split = false;
-        this.blackJackHand = blackJackHand;
-        this.hand = [];
-    }
-
-    set changeHealth(value) {
-        this.health = value;
-    }
-
-    set changeBust(value) {
-        this.bust = value;
-    }
-
-    //Precondition: Hand must not be empty
-    //Postcondition: Returns the amount of points the current hand is worth
-    points() {
-        if (this.blackJackHand.length < 1) return; //precondition
-        var sum = 0;
-        var aces = 0;
-
-        for (var i = 0; i < this.blackJackHand.length; i++) { //go through array to sum up values
-            //face cards are worth 10 points
-            if (this.blackJackHand[i][0] == 'J' || this.blackJackHand[i][0] == 'Q' || this.blackJackHand[i][0] == 'K') 
-                sum += 10;
-            else if (this.blackJackHand[i][0] == 'A') {//count ace as 11 for now
-                sum += 11; aces++;
-            } else sum += this.blackJackHand[i][0];
-        }
-
-        while (sum > 21 && aces > 0) { //if the sum has exceeded 21 due to aces, count them as 1 now.
-            sum -= 10;
-            aces--;
-        }
-
-        return sum;
-    }
-
-    deal(deck, id, show) {
-        if (deck.length < 1) return;
-
-        if (this.points() < 21) { //check if you can get another card
-            this.blackJackHand.push(deck.pop());
-            loadImage(this.blackJackHand, this.blackJackHand.length - 1, id, show);
-            document.getElementById("actionText").innerHTML += "<br />" + this.name + " hit.";
-            if (this.points() > 21) { // player busts
-                document.getElementById("actionText").innerHTML += "<br />" + this.name + " busted!";
-                this.changeBust = true;
-                setTimeout(() => { removeHandImgs(id); }, 2000);
-            }
-        }
-
-        updateScroll();
-    }
-}
-
-class Enemy extends Player {
-    constructor(health, atk, name, blackJackHand) {
-        super(health, atk, name, blackJackHand);
-    }
-
-    //Precondition: Change bust value to true and take damage from busting.
-    enemyBust() {
-        var dmg = (super.points() - 21);
-        document.getElementById("actionText").innerHTML += '<br />' + this.name + " busted!";
-        super.changeBust = true;
-        super.changeHealth = (this.health - dmg); //lose health based on how much they were from 21
-        document.getElementById("enemyHP").innerHTML = this.health;
-        document.getElementById("actionText").innerHTML += '<br />' + this.name + " took " + dmg + " damage.";
-    }
-
-    enemyDeal(deck) { 
-        //reveal the hand
-        removeHandImgs("enemyHand"); 
-        loadHandImages(this.blackJackHand, 'enemyHand', true);
-        document.getElementById("actionText").innerHTML += '<br />' + this.name + " reveals their hand.";
-
-        if (super.points() > 21) { // logic for if the dealer busts
-            this.enemyBust();
-            return;
-        }
-
-        //hit
-        if (super.points() >= 17) return; //dealer MUST stand if total is 17 or higher
-        else {
-            while (super.points() < 17) {//keep hitting until 17 or higher
-                super.deal(deck, 'enemyHand', true);
-            }
-
-            //check again after dealing
-            if (super.points() > 21) { 
-                this.enemyBust();
-            }
-        }
-        updateScroll();
-    }
-
-}
-
 
 /* 
 ######################################################################################################################
