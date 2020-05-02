@@ -57,6 +57,9 @@ class Player {
             if (this.points() > 21) { // player busts
                 document.getElementById("actionText").innerHTML += "<br />" + this.name + " busted!";
                 this.changeBust = true;
+                this.changeHealth = this.health - (this.points() - 21);
+                document.getElementById("playerHP").innerHTML = this.health;
+                document.getElementById("actionText").innerHTML += "<br />" + "You took " + this.points() - 21 + " damage."; 
                 setTimeout(() => { removeHandImgs(id); }, 2000);
             }
         }
@@ -315,15 +318,18 @@ function driverBlackjack() {
 
         enemy.enemyDeal(deck);
 
-        var enemyDmg = Math.abs(Math.floor((0.4 * (21 - enemy.points()) + enemy.atk)));
-        var playerDmg = Math.abs(Math.floor((0.4 * (21 - player.points()) + player.atk)));
+        if (enemy.points() == 21) var enemyDmg = enemy.atk * 2;
+        else var enemyDmg = Math.floor(Math.abs((0.4 * (12 - enemy.points()))) + enemy.atk);
+
+        if (player.points() == 21) var playerDmg = player.atk * 2;
+        else var playerDmg = Math.floor(Math.abs((0.4 * (12 - player.points()))) + player.atk);
 
         //case for taking damage
-        if (enemy.points() > player.points() && !enemy.bust) { // enemy attacks
-            player.changeHealth = player.health - enemyDmg;
+        if ((enemy.points() > player.points() || player.bust) && !enemy.bust) { // enemy attacks
+            player.changeHealth = player.health - enemyDmg; 
             document.getElementById("playerHP").innerHTML = player.health;
             document.getElementById("actionText").innerHTML += "<br />" + "You were attacked for " + enemyDmg + " damage."
-        } else if (player.points() > enemy.points() && !player.bust) { //case where you attack
+        } else if ((player.points() > enemy.points() || enemy.bust) && !player.bust) { //case where you attack
             enemy.changeHealth = enemy.health - playerDmg;
             document.getElementById("enemyHP").innerHTML = enemy.health;
             document.getElementById("actionText").innerHTML += "<br />" + "You attacked for " + playerDmg + " damage."
