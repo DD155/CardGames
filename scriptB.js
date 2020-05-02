@@ -277,7 +277,7 @@ function driverBlackjack() {
 
     //create the player and the enemy
     var player = new Player(30, 5, "Player", dealHand(deck, 2));
-    var enemy = new Enemy(45, 5, "Skeleton", dealHand(deck, 2));
+    var enemy = new Enemy(45, 3, "Skeleton", dealHand(deck, 2));
 
     //set text 
     document.getElementById('enemyHP').innerHTML = enemy.health;
@@ -313,6 +313,14 @@ function driverBlackjack() {
         text.innerHTML += "<br />" + "Player (You) stands.";
 
         enemy.enemyDeal(deck);
+        //case for taking damage
+        if (enemy.points() > player.points() && !enemy.bust && !player.bust) {
+            player.changeHealth = Math.floor(player.health - (0.4 * (21 - enemy.points()) + enemy.atk));
+            document.getElementById("playerHP").innerHTML = player.health;
+        } else if (player.points() > enemy.points() && !enemy.bust && !player.bust) {
+            enemy.changeHealth = Math.floor(enemy.health - (0.4 * (21 - player.points()) + player.atk));
+            document.getElementById("enemyHP").innerHTML = enemy.health;
+        }
 
         document.getElementById('hitButton').disabled = true;
         document.getElementById('standButton').disabled = true;
