@@ -313,13 +313,21 @@ function driverBlackjack() {
         text.innerHTML += "<br />" + "Player (You) stands.";
 
         enemy.enemyDeal(deck);
+
+        var enemyDmg = Math.abs(Math.floor((0.4 * (21 - enemy.points()) + enemy.atk)));
+        var playerDmg = Math.abs(Math.floor((0.4 * (21 - player.points()) + player.atk)));
+
         //case for taking damage
-        if (enemy.points() > player.points() && !enemy.bust && !player.bust) {
-            player.changeHealth = Math.floor(player.health - (0.4 * (21 - enemy.points()) + enemy.atk));
+        if (enemy.points() > player.points() && !enemy.bust) { // enemy attacks
+            player.changeHealth = player.health - enemyDmg;
             document.getElementById("playerHP").innerHTML = player.health;
-        } else if (player.points() > enemy.points() && !enemy.bust && !player.bust) {
-            enemy.changeHealth = Math.floor(enemy.health - (0.4 * (21 - player.points()) + player.atk));
+            document.getElementById("actionText").innerHTML += "<br />" + "You were attacked for " + enemyDmg + " damage."
+        } else if (player.points() > enemy.points() && !player.bust) { //case where you attack
+            enemy.changeHealth = enemy.health - playerDmg;
             document.getElementById("enemyHP").innerHTML = enemy.health;
+            document.getElementById("actionText").innerHTML += "<br />" + "You attacked for " + playerDmg + " damage."
+        } else if (player.points() == enemy.points()) { //case where hands are equal
+            document.getElementById("actionText").innerHTML += "<br />" + "You and the enemy were equally matched!"
         }
 
         document.getElementById('hitButton').disabled = true;
