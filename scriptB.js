@@ -277,19 +277,20 @@ function driverBlackjack() {
 
     //create the player and the enemy
     var player = new Player(30, 5, "Player", dealHand(deck, 2));
-    var enemy = new Enemy(45, 3, "Skeleton", dealHand(deck, 2));
+    var enemy = new Enemy(15, 3, "Skeleton", dealHand(deck, 2));
 
     //set text 
     document.getElementById('enemyHP').innerHTML = enemy.health;
     document.getElementById('enemyName').innerHTML = enemy.name;
     document.getElementById('playerName').innerHTML = player.name;
+    document.getElementById("actionText").innerHTML += "You have encountered " + enemy.name + ". Currently dealing...";
 
     //show images as they are being dealed, left to right from dealer view
     setTimeout(() => { loadImage(enemy.blackJackHand, 0, "enemyHand", true); }, 1500);
     setTimeout(() => { loadHandImages(player.blackJackHand, "playerHandBJ", true); }, 2500);
     //dealer has card face down
     setTimeout(() => { loadImage(enemy.blackJackHand, 1, "enemyHand", false); }, 3500);
-    setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The game has started. Good luck."; }, 3500);
+    setTimeout(() => { document.getElementById("actionText").innerHTML += "<br />" + "The battle has begun!"; }, 3500);
 
     //assign onclick event to the Hit button
     document.getElementById('hitButton').onclick = function () {
@@ -310,7 +311,7 @@ function driverBlackjack() {
     //assign onclick to Stand button
     document.getElementById('standButton').onclick = function () {
         var text = document.getElementById("actionText");
-        text.innerHTML += "<br />" + "Player (You) stands.";
+        text.innerHTML += "<br />" + player.name + " (You) stands.";
 
         enemy.enemyDeal(deck);
 
